@@ -1,0 +1,11 @@
+/Tetris
+**_DEBUG_32_
+**_DEBUG_64_
+**_RELEASE_32_
+**_RELEASE_64_
+**Build
+*.suo
+*.sdf
+*.user
+*.opensdf
+**ipch

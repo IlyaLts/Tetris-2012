@@ -1,0 +1,131 @@
+// Copyright (C) 2012-2015 Ilya Lyakhovets
+
+// Main.cpp
+
+/*
+===============================================================================
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+===============================================================================
+*/
+
+#include "Main.h"
+#include "Glass.h"
+#include "Figure.h"
+
+libEngine *engine		= nullptr;
+libTexture *background	= nullptr;
+
+Glass gameGlass;
+
+/*
+===================
+Init
+===================
+*/
+bool Init()
+{
+	engine->Get_libTexture(background, DATA_PACK "Background.png", true);
+	gameGlass.Init();
+	
+	return true;
+}
+
+/*
+===================
+Render
+===================
+*/
+bool Render()
+{
+	engine->GfxClear(LIBC_BLACK);
+
+	background->Draw2DQuad(libQuad(0.0f, 0.0f, 0.0f, 0.0f, WIDTH, HEIGHT, (float) WIDTH / background->GetWidth(), (float) HEIGHT / background->GetHeight()));
+	gameGlass.Draw(BLOCK_WIDTH, BLOCK_HEIGHT);
+
+	return true;
+}
+
+/*
+===================
+Frame
+===================
+*/
+bool Frame()
+{
+	if (engine->IsKeyDown(LIBK_ESCAPE))
+	{
+		gameGlass.SaveRecord();
+		return false;
+	}
+
+	if (engine->IsKeyDown(LIBK_F12)) engine->SysScreenshot("Screenshots/");
+
+#ifdef LIB_DEBUG
+	engine->SetState(LIB_TITLE, libVA("Tetris FPS: %d", engine->GetFPS()));
+#endif
+
+	gameGlass.Update();
+
+	return true;
+}
+
+/*
+===================
+Free
+===================
+*/
+bool Free()
+{
+	gameGlass.Free();
+
+	return true;
+}
+
+/*
+===================
+libMain
+===================
+*/
+libMain()
+{
+	if (libGetEngine(engine))
+	{
+		engine->SetState(LIB_TITLE, "Tetris");
+		engine->SetState(LIB_CLASS_NAME, "Tetris");
+		engine->SetState(LIB_RESOLUTION, WIDTH, HEIGHT);
+		engine->SetState(LIB_RESIZABLE, false);
+		engine->SetState(LIB_FPS_LIMIT, 60);
+		engine->SetState(LIB_LOG_FILENAME, "Tetris.log");
+#ifdef LIB_DEBUG
+		engine->SetState(LIB_LOGFILE, true);
+#else
+		engine->SetState(LIB_LOGFILE, false);
+#endif
+		engine->SetState(LIB_INIT, Init);
+		engine->SetState(LIB_RENDER, Render);
+		engine->SetState(LIB_FRAME, Frame);
+		engine->SetState(LIB_FREE, Free);
+
+		engine->StartEngine();
+		libFreeEngine(engine);
+	}
+	else
+	{
+		libDialog::Error("Error!", "Couldn't load libEngine.");
+		return -1;
+	}
+
+	return 0;
+}
