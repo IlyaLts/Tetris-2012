@@ -238,7 +238,6 @@ void Figure::New()
 	num = numNext;
 	numNext = libRandom::Int(0, 99999) % NUMBER_OF_FIGURES;
 
-	// Set the current figure
 	for (int i = 0; i < FIGURE_WIDTH; i++)
 	{
 		for (int j = 0; j < FIGURE_HEIGHT; j++)

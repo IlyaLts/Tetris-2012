@@ -25,8 +25,8 @@
 #include "Figure.h"
 
 #define NUMBERS_OF_LEVELS		15
-#define KEY_DELAY				1.0f
-#define KEY_DELAY_DECREASE		0.05f
+#define FIGURE_DELAY			1.0f
+#define FIGURE_DELAY_DECREASE	0.05f
 
 #define SCORE_FOR_1_LINE		10
 #define SCORE_FOR_2_LINES		30
@@ -91,7 +91,7 @@ private:
 	bool		help;
 	bool		ghostEnabled;
 	libHolder	score;
-	libHolder	scoreNeeded;
+	libHolder	scoreGoal;
 	libHolder	level;
 	libHolder	record;
 

@@ -64,12 +64,12 @@ public:
 	void		New();
 	void		Rotate();
 
-	Block		blocks[FIGURE_WIDTH][FIGURE_HEIGHT];
 	int			x;
 	int			y;
 	int			rot;
 	int			num;
 	int			numNext;
+	Block		blocks[FIGURE_WIDTH][FIGURE_HEIGHT];
 };
 
 #endif // !__FIGURE_H__

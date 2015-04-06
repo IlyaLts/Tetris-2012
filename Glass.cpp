@@ -86,11 +86,11 @@ void Glass::Draw(float x, float y)
 	if (help)
 	{
 		// Glass
-		engine->Draw2DQuad(libQuad(x, y, WIDTH - x, HEIGHT - y));
-		engine->Draw2DLine(libVertex(x, HEIGHT - y, LIBC_BLACK), libVertex(WIDTH - x, HEIGHT - y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(WIDTH - x, HEIGHT - y, LIBC_BLACK), libVertex(WIDTH-x, y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(WIDTH - x, y, LIBC_BLACK), libVertex(x, y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(x, y, LIBC_BLACK), libVertex(x, HEIGHT - y, LIBC_BLACK), 2.0f);
+		engine->Draw2DQuad(libQuad(x, y, WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT));
+		engine->Draw2DLine(libVertex(x, HEIGHT - BLOCK_HEIGHT, LIBC_BLACK), libVertex(WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT, LIBC_BLACK), 2.0f);
+		engine->Draw2DLine(libVertex(WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT, LIBC_BLACK), libVertex(WIDTH - BLOCK_WIDTH, y, LIBC_BLACK), 2.0f);
+		engine->Draw2DLine(libVertex(WIDTH - BLOCK_WIDTH, y, LIBC_BLACK), libVertex(x, y, LIBC_BLACK), 2.0f);
+		engine->Draw2DLine(libVertex(x, y, LIBC_BLACK), libVertex(x, HEIGHT - BLOCK_HEIGHT, LIBC_BLACK), 2.0f);
 
 		// Help
 		fnt->Print2D(150.0f + x, BLOCK_HEIGHT + y - 10.0f, libVA("Tetris %s", TETRIS_VERSION));
@@ -107,7 +107,7 @@ void Glass::Draw(float x, float y)
 	else
 	{
 		// Glass
-		engine->Draw2DQuad(libQuad(x, y, BLOCK_WIDTH * GLASS_WIDTH + x, HEIGHT - y));
+		engine->Draw2DQuad(libQuad(x, y, BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y));
 		
 		// Draw ghosts of the blocks in the glass
 		if (ghostEnabled && !gameOver)
@@ -176,13 +176,13 @@ void Glass::Draw(float x, float y)
 			}
 		}
 
-		engine->Draw2DLine(libVertex(x, HEIGHT - y, LIBC_BLACK), libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, HEIGHT - y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, HEIGHT - y, LIBC_BLACK), libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, y, LIBC_BLACK), 2.0f);
+		engine->Draw2DLine(libVertex(x, BLOCK_HEIGHT * GLASS_HEIGHT + y, LIBC_BLACK), libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y, LIBC_BLACK), 2.0f);
+		engine->Draw2DLine(libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y, LIBC_BLACK), libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, y, LIBC_BLACK), 2.0f);
 		engine->Draw2DLine(libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, y, LIBC_BLACK), libVertex(x, y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(x, y, LIBC_BLACK), libVertex(x, HEIGHT - y, LIBC_BLACK), 2.0f);
+		engine->Draw2DLine(libVertex(x, y, LIBC_BLACK), libVertex(x, BLOCK_HEIGHT * GLASS_HEIGHT + y, LIBC_BLACK), 2.0f);
 
 		// A Cell for a next new figure
-		engine->Draw2DQuad(libQuad(WIDTH - 32.0f - BLOCK_WIDTH * FIGURE_WIDTH, y, WIDTH - 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f));
+		engine->Draw2DQuad(libQuad(BLOCK_WIDTH * GLASS_WIDTH + x + 32.0f, y, BLOCK_WIDTH * GLASS_WIDTH + BLOCK_WIDTH * FIGURE_WIDTH + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f));
 
 		// Draw a next new figure
 		for (int i = 0; i < FIGURE_WIDTH; i++)
@@ -212,10 +212,10 @@ void Glass::Draw(float x, float y)
 			}
 		}
 
-		engine->Draw2DLine(libVertex(320.0f + x + 32.0f, 158.0f + y, LIBC_BLACK), libVertex(448.0f + x + 32.0f, 158.0f + y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(448.0f + x + 32.0f, 158.0f + y, LIBC_BLACK), libVertex(448.0f + x + 32.0f, y, LIBC_BLACK), 2.0f);
+		engine->Draw2DLine(libVertex(320.0f + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f, LIBC_BLACK), libVertex(448.0f + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f, LIBC_BLACK), 2.0f);
+		engine->Draw2DLine(libVertex(448.0f + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f, LIBC_BLACK), libVertex(448.0f + x + 32.0f, y, LIBC_BLACK), 2.0f);
 		engine->Draw2DLine(libVertex(448.0f + x + 32.0f, y, LIBC_BLACK), libVertex(320.0f + x + 32.0f, y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(320.0f + x + 32.0f, y, LIBC_BLACK), libVertex(320 + x + 32.0f, 158.0f + y, LIBC_BLACK), 2.0f);
+		engine->Draw2DLine(libVertex(320.0f + x + 32.0f, y, LIBC_BLACK), libVertex(320 + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f, LIBC_BLACK), 2.0f);
 		engine->Draw2DLine(libVertex(320.0f + x + 32.0f, 32.0f + y, LIBC_BLACK), libVertex(448 + x + 32.0f, 32.0f + y, LIBC_BLACK), 2.0f);
 
 		// Cells
@@ -232,8 +232,8 @@ void Glass::Draw(float x, float y)
 		fnt->Print2D(320.0f + x + 32.0f, y, "Next");
 		fnt->Print2D(320.0f + x + 32.0f, 190.0f + y, "Score");
 		fnt->Print2D(320.0f + x + 32.0f, 222.0f + y, "%d", score.Get());
-		fnt->Print2D(320.0f + x + 32.0f, 286.0f + y, "Needed");
-		fnt->Print2D(320.0f + x + 32.0f, 318.0f + y, "%d", scoreNeeded.Get());
+		fnt->Print2D(320.0f + x + 32.0f, 286.0f + y, "Goal");
+		fnt->Print2D(320.0f + x + 32.0f, 318.0f + y, "%d", scoreGoal.Get());
 		fnt->Print2D(320.0f + x + 32.0f, 382.0f + y, "Level");
 		fnt->Print2D(320.0f + x + 32.0f, 412.0f + y, "%d", level.Get());
 		fnt->Print2D(320.0f + x + 32.0f, 476.0f + y, "Record");
@@ -272,6 +272,7 @@ void Glass::Update()
 
 	if (!gameOver)
 	{
+		// Down the figure
 		if (fallDelay.Get() >= delay)
 		{
 			fallDelay.Restart();
@@ -290,7 +291,7 @@ void Glass::Update()
 			rightFigureDelay.Restart();
 			MoveRight();
 		}
-		// Down figure
+		// Move down
 		if ((engine->IsKey(LIBK_S) || engine->IsKey(LIBK_DOWN)) && downFigureDelay.Get() >= keyDelay)
 		{
 			fallDelay.Restart();
@@ -358,10 +359,10 @@ void Glass::NewGame()
 
 	gameOver = false;
 	score.Set(0);
-	scoreNeeded.Set(STARTUP_SCORE_GOAL);
+	scoreGoal.Set(STARTUP_SCORE_GOAL);
 	level.Set(1);
 
-	delay = KEY_DELAY;
+	delay = FIGURE_DELAY;
 	fallDelay.Restart();
 	leftFigureDelay.Restart();
 	rightFigureDelay.Restart();
@@ -463,22 +464,20 @@ void Glass::RemoveFilledLines()
 		else
 			score.Set(score.Get() + SCORE_FOR_4_LINES * level.Get());
 
-		if (score.Get() >= scoreNeeded.Get())
+		if (score.Get() >= scoreGoal.Get())
 		{
 			if (level.Get() == NUMBERS_OF_LEVELS)
 			{
 				score.Set(MAX_SCORE);
+				scoreGoal.Set(MAX_SCORE);
 				gameOver = true;
 				return;
 			}
 
 			level.Set(level.Get() + 1);
-			delay -= KEY_DELAY_DECREASE;
+			delay -= FIGURE_DELAY_DECREASE;
 
-			if (level.Get() != NUMBERS_OF_LEVELS)
-				scoreNeeded.Set(scoreNeeded.Get() * SCORE_GOAL_MULTIPLIER);
-			else
-				scoreNeeded.Set(MAX_SCORE);
+			scoreGoal.Set(scoreGoal.Get() * SCORE_GOAL_MULTIPLIER);
 		}
 	}
 }
@@ -575,7 +574,7 @@ void Glass::MoveRight()
 			if (figure.blocks[i][j].filled && figure.x + i == GLASS_WIDTH - 1)
 				return;
 
-			if (i+1 < 4)
+			if (i+1 < FIGURE_WIDTH)
 			{
 				if (figure.blocks[i][j].filled && glass[figure.x+i+1][figure.y+j].filled && !figure.blocks[i+1][j].filled)
 					return;
@@ -657,15 +656,16 @@ void Glass::RotateFigure()
 	int rot = figure.rot + 1;
 	if (rot == ROTATIONS_OF_FIGURE) rot = 0;
 
+	// Move the figure right from wall if there is not enough free space for rotate
 	do
 	{
 		flag = true;
 
 		if (figure.x < 0)
 		{
-			for (int i = 0; i < figure.x * -1; i++)
+			for (int i = 0; i < -figure.x; i++)
 			{
-				for (int j = 0; j < 4; j++)
+				for (int j = 0; j < FIGURE_HEIGHT; j++)
 				{
 					if (g_figures[figure.num][rot][j][i])
 					{
@@ -678,15 +678,16 @@ void Glass::RotateFigure()
 		if (!flag) MoveRight();
 	} while (!flag);
 
+	// Move the figure Left from wall if there is not enough free space for rotate
 	do
 	{
 		flag = true;
 
-		if (figure.x > GLASS_WIDTH-4)
+		if (figure.x > GLASS_WIDTH - FIGURE_WIDTH)
 		{
-			for (int i = 3; i >= 10-figure.x; i--)
+			for (int i = 3; i >= GLASS_WIDTH-figure.x; i--)
 			{
-				for (int j = 0; j < 4; j++)
+				for (int j = 0; j < FIGURE_HEIGHT; j++)
 				{
 					if (g_figures[figure.num][rot][j][i])
 					{
@@ -699,11 +700,12 @@ void Glass::RotateFigure()
 		if (!flag) MoveLeft();
 	} while (!flag);
 
-	if (figure.y > GLASS_HEIGHT-5)
+	// Don't allow to rotate the figure when it's below FIGURE_HEIGHT
+	if (figure.y > GLASS_HEIGHT-FIGURE_HEIGHT-1)
 	{
-		for (int i = 3; i >= GLASS_HEIGHT-1-figure.y; i--)
+		for (int i = 3; i >= GLASS_HEIGHT-figure.y-1; i--)
 		{
-			for (int j = 0; j < 4; j++)
+			for (int j = 0; j < FIGURE_WIDTH; j++)
 			{
 				if (g_figures[figure.num][rot+1][j][i] && glass[figure.x+i][figure.y+j].filled)
 				{
@@ -717,9 +719,10 @@ void Glass::RotateFigure()
 		}
 	}
 
-	for (int i = 0; i < 4; i++)
+	// Don't allow to rotate the figure if there are any other blocks
+	for (int i = 0; i < FIGURE_WIDTH; i++)
 	{
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < FIGURE_HEIGHT; j++)
 		{
 			if (g_figures[figure.num][figure.rot+1][j][i] & glass[figure.x+i][figure.y+j].filled & !g_figures[figure.num][figure.rot][j][i])
 			{
