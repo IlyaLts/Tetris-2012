@@ -109,6 +109,21 @@ void Glass::Draw(float x, float y)
 		// Glass
 		engine->Draw2DQuad(libQuad(x, y, BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y));
 		
+		// Draw the figure
+		if (IsThereFreeSpaceForFigure())
+		{
+			for (int i = 0; i < FIGURE_WIDTH; i++)
+			{
+				for (int j = 0; j < FIGURE_HEIGHT; j++)
+				{
+					if (figure.blocks[i][j].filled)
+					{
+						DrawBlock(BLOCK_WIDTH * (i + figure.x) + x, BLOCK_HEIGHT * (j + figure.y) + y, figure.blocks[i][j].clr);
+					}
+				}
+			}
+		}
+
 		// Draw ghosts of the blocks in the glass
 		if (ghostEnabled && !gameOver)
 		{
@@ -122,24 +137,8 @@ void Glass::Draw(float x, float y)
 				for (int j = 0; j < FIGURE_HEIGHT; j++)
 				{
 					if (figure.blocks[i][j].filled)
-					{
-						float fx = BLOCK_WIDTH * (i + figure.x) + x;
-						float fy = BLOCK_HEIGHT * (j + figure.y) + y;
-						
-						if (figure.blocks[i][j].clr == CYAN)
-							blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, fx, fy, BLOCK_GHOST_ALPHA);
-						else if (figure.blocks[i][j].clr == BLUE)
-							blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH, 0, BLOCK_WIDTH * 2, BLOCK_HEIGHT, fx, fy, BLOCK_GHOST_ALPHA);
-						else if (figure.blocks[i][j].clr == ORANGE)
-							blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH * 2, 0, BLOCK_WIDTH * 3, BLOCK_HEIGHT, fx, fy, BLOCK_GHOST_ALPHA);
-						else if (figure.blocks[i][j].clr == YELLOW)
-							blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT * 2, fx, fy, BLOCK_GHOST_ALPHA);
-						else if (figure.blocks[i][j].clr == GREEN)
-							blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH * 2, BLOCK_HEIGHT * 2, fx, fy, BLOCK_GHOST_ALPHA);
-						else if (figure.blocks[i][j].clr == PURPLE)
-							blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH * 2, BLOCK_HEIGHT, BLOCK_WIDTH * 3, BLOCK_HEIGHT * 2, fx, fy, BLOCK_GHOST_ALPHA);
-						else if (figure.blocks[i][j].clr == RED)
-							blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, BLOCK_HEIGHT * 2, BLOCK_WIDTH, BLOCK_HEIGHT * 3, fx, fy, BLOCK_GHOST_ALPHA);
+					{	
+						DrawBlock(BLOCK_WIDTH * (i + figure.x) + x, BLOCK_HEIGHT * (j + figure.y) + y, figure.blocks[i][j].clr, BLOCK_GHOST_COLOR);
 					}
 				}
 			}
@@ -155,23 +154,7 @@ void Glass::Draw(float x, float y)
 			{
 				if (glass[i][j].filled)
 				{
-					float fx = BLOCK_WIDTH * i + x;
-					float fy = BLOCK_HEIGHT * j + y;
-
-					if (glass[i][j].clr == CYAN)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, fx, fy, libClr());
-					else if (glass[i][j].clr == BLUE)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH, 0, BLOCK_WIDTH * 2, BLOCK_HEIGHT, fx, fy);
-					else if (glass[i][j].clr == ORANGE)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH * 2, 0, BLOCK_WIDTH * 3, BLOCK_HEIGHT, fx, fy);
-					else if (glass[i][j].clr == YELLOW)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT * 2, fx, fy);
-					else if (glass[i][j].clr == GREEN)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH * 2, BLOCK_HEIGHT * 2, fx, fy);
-					else if (glass[i][j].clr == PURPLE)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH * 2, BLOCK_HEIGHT, BLOCK_WIDTH * 3, BLOCK_HEIGHT * 2, fx, fy);
-					else if (glass[i][j].clr == RED)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, BLOCK_HEIGHT * 2, BLOCK_WIDTH, BLOCK_HEIGHT * 3, fx, fy);
+					DrawBlock(BLOCK_WIDTH * i + x, BLOCK_HEIGHT * j + y, glass[i][j].clr);
 				}
 			}
 		}
@@ -191,23 +174,7 @@ void Glass::Draw(float x, float y)
 			{
 				if (g_figures[figure.numNext][0][j][i])
 				{
-					float fx = 320.0f + BLOCK_WIDTH * i + x + 32.0f;
-					float fy = BLOCK_HEIGHT * j + y + 32.0f;
-
-					if (figure.numNext == CYAN)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, fx, fy);
-					else if (figure.numNext == BLUE)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH, 0, BLOCK_WIDTH * 2, BLOCK_HEIGHT, fx, fy);
-					else if (figure.numNext == ORANGE)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH * 2, 0, BLOCK_WIDTH * 3, BLOCK_HEIGHT, fx, fy);
-					else if (figure.numNext == YELLOW)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT * 2, fx, fy);
-					else if (figure.numNext == GREEN)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH * 2, BLOCK_HEIGHT * 2, fx, fy);
-					else if (figure.numNext == PURPLE)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH * 2, BLOCK_HEIGHT, BLOCK_WIDTH * 3, BLOCK_HEIGHT * 2, fx, fy);
-					else if (figure.numNext == RED)
-						blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, BLOCK_HEIGHT * 2, BLOCK_WIDTH, BLOCK_HEIGHT * 3, fx, fy);
+					DrawBlock(320.0f + BLOCK_WIDTH * i + x + 32.0f, BLOCK_HEIGHT * j + y + 32.0f, (color_t) figure.numNext);
 				}
 			}
 		}
@@ -340,22 +307,40 @@ void Glass::SaveRecord()
 
 /*
 ===================
+Glass::DrawBlock
+===================
+*/
+void Glass::DrawBlock(float x, float y, color_t clrType, libClr clr) const
+{
+	if (clrType == CYAN)
+		blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, x, y, clr);
+	else if (clrType == BLUE)
+		blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH, 0, BLOCK_WIDTH * 2, BLOCK_HEIGHT, x, y, clr);
+	else if (clrType == ORANGE)
+		blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH * 2, 0, BLOCK_WIDTH * 3, BLOCK_HEIGHT, x, y, clr);
+	else if (clrType == YELLOW)
+		blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT * 2, x, y, clr);
+	else if (clrType == GREEN)
+		blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH * 2, BLOCK_HEIGHT * 2, x, y, clr);
+	else if (clrType == PURPLE)
+		blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH * 2, BLOCK_HEIGHT, BLOCK_WIDTH * 3, BLOCK_HEIGHT * 2, x, y, clr);
+	else if (clrType == RED)
+		blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, BLOCK_HEIGHT * 2, BLOCK_WIDTH, BLOCK_HEIGHT * 3, x, y, clr);
+}
+
+/*
+===================
 Glass:NewGame
 ===================
 */
 void Glass::NewGame()
 {
 	for (int i = 0; i < GLASS_WIDTH; i++)
-	{
 		for (int j = 0; j < GLASS_HEIGHT; j++)
-		{
 			glass[i][j].filled = false;
-		}
-	}
 
 	figure.New();
 	figure.x = (GLASS_WIDTH / 2) - (FIGURE_WIDTH / 2);
-	BuildFigure();
 
 	gameOver = false;
 	score.Set(0);
@@ -371,12 +356,10 @@ void Glass::NewGame()
 
 /*
 ===================
-Glass::BuildFigure
-
-Build the current figure into the glass
+Glass::BuildFigureIntoGlass
 ===================
 */
-void Glass::BuildFigure()
+void Glass::BuildFigureIntoGlass()
 {
 	for (int i = 0; i < FIGURE_WIDTH; i++)
 	{
@@ -386,27 +369,6 @@ void Glass::BuildFigure()
 			{
 				glass[figure.x+i][figure.y+j].filled = true;
 				glass[figure.x+i][figure.y+j].clr = figure.blocks[i][j].clr;
-			}
-		}
-	}
-}
-
-/*
-===================
-Glass::ClearFigure
-
-Clear the current figure from the glass
-===================
-*/
-void Glass::ClearFigure()
-{
-	for (int i = 0; i < FIGURE_WIDTH; i++)
-	{
-		for (int j = 0; j < FIGURE_HEIGHT; j++)
-		{
-			if (figure.blocks[i][j].filled)
-			{
-				glass[figure.x+i][figure.y+j].filled = false;
 			}
 		}
 	}
@@ -466,7 +428,7 @@ void Glass::RemoveFilledLines()
 
 		if (score.Get() >= scoreGoal.Get())
 		{
-			if (level.Get() == NUMBERS_OF_LEVELS)
+			if (level.Get() == NUMBER_OF_LEVELS)
 			{
 				score.Set(MAX_SCORE);
 				scoreGoal.Set(MAX_SCORE);
@@ -487,7 +449,7 @@ void Glass::RemoveFilledLines()
 Glass::IsFigureDropped
 ===================
 */
-bool Glass::IsFigureDropped()
+bool Glass::IsFigureDropped() const
 {
 	for (int i = 0; i < FIGURE_WIDTH; i++)
 	{
@@ -512,7 +474,7 @@ bool Glass::IsFigureDropped()
 Glass::IsThereFreeSpaceForFigure
 ===================
 */
-bool Glass::IsThereFreeSpaceForFigure()
+bool Glass::IsThereFreeSpaceForFigure() const
 {
 	for (int i = 0; i < FIGURE_WIDTH; i++)
 	{
@@ -555,9 +517,7 @@ void Glass::MoveLeft()
 		}
 	}
 
-	ClearFigure();
 	figure.x--;
-	BuildFigure();
 }
 
 /*
@@ -587,9 +547,7 @@ void Glass::MoveRight()
 		}
 	}
 
-	ClearFigure();
 	figure.x++;
-	BuildFigure();
 }
 
 /*
@@ -600,21 +558,15 @@ Glass::MoveDown
 void Glass::MoveDown()
 {
 	if (!IsFigureDropped())
-	{
-		ClearFigure();
 		figure.y++;
-		BuildFigure();
-	}
 
 	if (IsFigureDropped())
 	{
+		BuildFigureIntoGlass();
 		RemoveFilledLines();
 		drop->Play();
 		figure.New();
 		figure.x = (GLASS_WIDTH / 2) - (FIGURE_WIDTH / 2);
-
-		if (IsThereFreeSpaceForFigure())
-			BuildFigure();
 
 		if (IsFigureDropped())
 			gameOver = true;
@@ -628,17 +580,14 @@ Glass::DropFigure
 */
 void Glass::DropFigure()
 {
-	ClearFigure();
 	while (!IsFigureDropped()) figure.y++;
-	BuildFigure();
+	
+	BuildFigureIntoGlass();
 
 	RemoveFilledLines();
 	drop->Play();
 	figure.New();
 	figure.x = (GLASS_WIDTH / 2) - (FIGURE_WIDTH / 2);
-
-	if (IsThereFreeSpaceForFigure())
-		BuildFigure();
 
 	if (IsFigureDropped())
 		gameOver = true;
@@ -703,7 +652,7 @@ void Glass::RotateFigure()
 	// Don't allow to rotate the figure when it's below FIGURE_HEIGHT
 	if (figure.y > GLASS_HEIGHT-FIGURE_HEIGHT-1)
 	{
-		for (int i = 3; i >= GLASS_HEIGHT-figure.y-1; i--)
+		for (int i = FIGURE_HEIGHT-1; i >= GLASS_HEIGHT-figure.y-1; i--)
 		{
 			for (int j = 0; j < FIGURE_WIDTH; j++)
 			{
@@ -734,10 +683,5 @@ void Glass::RotateFigure()
 		}
 	}
 
-	if (flag)
-	{
-		ClearFigure();
-		figure.Rotate();
-		BuildFigure();
-	}
+	if (flag) figure.Rotate();
 }

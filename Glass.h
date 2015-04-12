@@ -24,7 +24,7 @@
 
 #include "Figure.h"
 
-#define NUMBERS_OF_LEVELS		15
+#define NUMBER_OF_LEVELS		15
 #define FIGURE_DELAY			1.0f
 #define FIGURE_DELAY_DECREASE	0.05f
 
@@ -38,7 +38,7 @@
 
 #define BLOCK_WIDTH				32
 #define BLOCK_HEIGHT			32
-#define BLOCK_GHOST_ALPHA		libClr(1.0f, 1.0f, 1.0f, 0.33f)
+#define BLOCK_GHOST_COLOR		libClr(1.0f, 1.0f, 1.0f, 0.33f)
 
 #define GLASS_WIDTH				10
 #define GLASS_HEIGHT			20
@@ -65,12 +65,13 @@ public:
 
 private:
 
+	void		DrawBlock(float x, float y, color_t clrType, libClr clr = libClr()) const;
+
 	void		NewGame();
-	void		BuildFigure();						// Build the current figure into the glass
-	void		ClearFigure();						// Clear the current figure from the glass
+	void		BuildFigureIntoGlass();
 	void		RemoveFilledLines();
-	bool		IsFigureDropped();
-	bool		IsThereFreeSpaceForFigure();
+	bool		IsFigureDropped() const;
+	bool		IsThereFreeSpaceForFigure() const;
 
 	void		MoveLeft();
 	void		MoveRight();

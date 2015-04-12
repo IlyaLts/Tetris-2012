@@ -51,7 +51,7 @@ bool Render()
 	engine->GfxClear(LIBC_BLACK);
 
 	background->Draw2DQuad(libQuad(0.0f, 0.0f, 0.0f, 0.0f, WIDTH, HEIGHT, (float) WIDTH / background->GetWidth(), (float) HEIGHT / background->GetHeight()));
-	gameGlass.Draw(BLOCK_WIDTH, BLOCK_HEIGHT);
+	gameGlass.Draw(32.0f, 32.0f);
 
 	return true;
 }
@@ -71,11 +71,11 @@ bool Frame()
 
 	if (engine->IsKeyDown(LIBK_F12)) engine->SysScreenshot("Screenshots/");
 
+	gameGlass.Update();
+
 #ifdef LIB_DEBUG
 	engine->SetState(LIB_TITLE, libVA("Tetris FPS: %d", engine->GetFPS()));
 #endif
-
-	gameGlass.Update();
 
 	return true;
 }
