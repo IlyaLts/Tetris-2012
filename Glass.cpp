@@ -87,10 +87,7 @@ void Glass::Draw(float x, float y)
 	{
 		// Glass
 		engine->Draw2DQuad(libQuad(x, y, WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT));
-		engine->Draw2DLine(libVertex(x, HEIGHT - BLOCK_HEIGHT, LIBC_BLACK), libVertex(WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT, LIBC_BLACK), libVertex(WIDTH - BLOCK_WIDTH, y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(WIDTH - BLOCK_WIDTH, y, LIBC_BLACK), libVertex(x, y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(x, y, LIBC_BLACK), libVertex(x, HEIGHT - BLOCK_HEIGHT, LIBC_BLACK), 2.0f);
+		DrawRectangleOutline(libVertex(x, y), libVertex(WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT));
 
 		// Help
 		fnt->Print2D(150.0f + x, BLOCK_HEIGHT + y - 10.0f, libVA("Tetris %s", TETRIS_VERSION));
@@ -159,10 +156,7 @@ void Glass::Draw(float x, float y)
 			}
 		}
 
-		engine->Draw2DLine(libVertex(x, BLOCK_HEIGHT * GLASS_HEIGHT + y, LIBC_BLACK), libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y, LIBC_BLACK), libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, y, LIBC_BLACK), libVertex(x, y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(x, y, LIBC_BLACK), libVertex(x, BLOCK_HEIGHT * GLASS_HEIGHT + y, LIBC_BLACK), 2.0f);
+		DrawRectangleOutline(libVertex(x, y), libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y));
 
 		// A Cell for a next new figure
 		engine->Draw2DQuad(libQuad(BLOCK_WIDTH * GLASS_WIDTH + x + 32.0f, y, BLOCK_WIDTH * GLASS_WIDTH + BLOCK_WIDTH * FIGURE_WIDTH + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f));
@@ -179,21 +173,15 @@ void Glass::Draw(float x, float y)
 			}
 		}
 
-		engine->Draw2DLine(libVertex(320.0f + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f, LIBC_BLACK), libVertex(448.0f + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(448.0f + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f, LIBC_BLACK), libVertex(448.0f + x + 32.0f, y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(448.0f + x + 32.0f, y, LIBC_BLACK), libVertex(320.0f + x + 32.0f, y, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(320.0f + x + 32.0f, y, LIBC_BLACK), libVertex(320 + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f, LIBC_BLACK), 2.0f);
-		engine->Draw2DLine(libVertex(320.0f + x + 32.0f, 32.0f + y, LIBC_BLACK), libVertex(448 + x + 32.0f, 32.0f + y, LIBC_BLACK), 2.0f);
+		DrawRectangleOutline(libVertex(320.0f + x + 32.0f, y), libVertex(448 + x + 32.0f, 32.0f + y));
+		DrawRectangleOutline(libVertex(320.0f + x + 32.0f, 32.0f + y), libVertex(448.0f + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f));
 
 		// Cells
 		for (int i = 0; i < 4; i++)
 		{
 			engine->Draw2DQuad(libQuad(320.0f + x + 32.0f, 190.0f + y + 96.0f * i, 448.0f + x + 32.0f, 254.0f + y + 96.0f * i));
-			engine->Draw2DLine(libVertex(320.0f + x + 32.0f, 254.0f + y + 96.0f * i, LIBC_BLACK), libVertex(448.0f + x + 32.0f, 254.0f + y + 96.0f * i, LIBC_BLACK), 2.0f);
-			engine->Draw2DLine(libVertex(448.0f + x + 32.0f, 254.0f + y + 96.0f * i, LIBC_BLACK), libVertex(448.0f + x + 32.0f, 190.0f + y + 96.0f * i, LIBC_BLACK), 2.0f);
-			engine->Draw2DLine(libVertex(448.0f + x + 32.0f, 190.0f + y + 96.0f * i, LIBC_BLACK), libVertex(320.0f + x + 32.0f, 190.0f + y + 96.0f * i, LIBC_BLACK), 2.0f);
-			engine->Draw2DLine(libVertex(320.0f + x + 32.0f, 190.0f + y + 96.0f * i, LIBC_BLACK), libVertex(320.0f + x + 32.0f, 254.0f + y + 96.0f * i, LIBC_BLACK), 2.0f);
-			engine->Draw2DLine(libVertex(320.0f + x + 32.0f, 222.0f + y + 96.0f * i, LIBC_BLACK), libVertex(448.0f + x + 32.0f, 222.0f + y + 96.0f * i, LIBC_BLACK), 2.0f);
+			DrawRectangleOutline(libVertex(320.0f + x + 32.0f, 190.0f + y + 96.0f * i), libVertex(448.0f + x + 32.0f, 222.0f + y + 96.0f * i));
+			DrawRectangleOutline(libVertex(320.0f + x + 32.0f, 222.0f + y + 96.0f * i), libVertex(448.0f + x + 32.0f, 254.0f + y + 96.0f * i));
 		}
 
 		fnt->Print2D(320.0f + x + 32.0f, y, "Next");
@@ -210,10 +198,7 @@ void Glass::Draw(float x, float y)
 		if (gameOver)
 		{
 			engine->Draw2DQuad(libQuad(58.0f + x, 168.0f + y, 270.0f + x, 200.0f + y));
-			engine->Draw2DLine(libVertex(58.0f + x, 200.0f + y, LIBC_BLACK), libVertex(270.0f + x, 200.0f + y, LIBC_BLACK), 2.0f);
-			engine->Draw2DLine(libVertex(270.0f + x, 200.0f + y, LIBC_BLACK), libVertex(270.0f + x, 168.0f + y, LIBC_BLACK), 2.0f);
-			engine->Draw2DLine(libVertex(270.0f + x, 168.0f + y, LIBC_BLACK), libVertex(58.0f + x, 168.0f + y, LIBC_BLACK), 2.0f);
-			engine->Draw2DLine(libVertex(58.0f + x, 168.0f + y, LIBC_BLACK), libVertex(58.0f + x, 200.0f + y, LIBC_BLACK), 2.0f);
+			DrawRectangleOutline(libVertex(58.0f + x, 168.0f + y), libVertex(58.0f + x, 168.0f + y));
 
 			if (score.Get() != MAX_SCORE)
 				fnt->Print2D(80.0f + x, 200.0f, "GAME OVER!");
@@ -326,6 +311,19 @@ void Glass::DrawBlock(float x, float y, color_t clrType, libClr clr) const
 		blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH * 2, BLOCK_HEIGHT, BLOCK_WIDTH * 3, BLOCK_HEIGHT * 2, x, y, clr);
 	else if (clrType == RED)
 		blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, BLOCK_HEIGHT * 2, BLOCK_WIDTH, BLOCK_HEIGHT * 3, x, y, clr);
+}
+
+/*
+===================
+Glass::DrawRectangleOutline
+===================
+*/
+void Glass::DrawRectangleOutline(libVertex v1, libVertex v2)
+{
+	engine->Draw2DLine(libVertex(v1.x, v1.y, LIBC_BLACK), libVertex(v2.x, v1.y, LIBC_BLACK), 2.0f);
+	engine->Draw2DLine(libVertex(v2.x, v1.y, LIBC_BLACK), libVertex(v2.x, v2.y, LIBC_BLACK), 2.0f);
+	engine->Draw2DLine(libVertex(v2.x, v2.y, LIBC_BLACK), libVertex(v1.x, v2.y, LIBC_BLACK), 2.0f);
+	engine->Draw2DLine(libVertex(v1.x, v2.y, LIBC_BLACK), libVertex(v1.x, v1.y, LIBC_BLACK), 2.0f);
 }
 
 /*
