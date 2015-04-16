@@ -597,7 +597,7 @@ void Glass::RotateFigure()
 	int rot = figure.rot + 1;
 	if (rot == ROTATIONS_OF_FIGURE) rot = 0;
 
-	// Move the figure right from wall if there is not enough free space for rotate
+	// Move the figure right from wall if there is not enough free space to rotate
 	do
 	{
 		flag = true;
@@ -619,7 +619,7 @@ void Glass::RotateFigure()
 		if (!flag) MoveRight();
 	} while (!flag);
 
-	// Move the figure Left from wall if there is not enough free space for rotate
+	// Move the figure left from wall if there is not enough free space to rotate
 	do
 	{
 		flag = true;
