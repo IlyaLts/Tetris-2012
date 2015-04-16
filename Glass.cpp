@@ -87,7 +87,7 @@ void Glass::Draw(float x, float y)
 	{
 		// Glass
 		engine->Draw2DQuad(libQuad(x, y, WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT));
-		DrawRectangleOutline(libVertex(x, y), libVertex(WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT));
+		DrawRectangleOutline(libVertex(x, y), libVertex(WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT), LIBC_BLACK);
 
 		// Help
 		fnt->Print2D(150.0f + x, BLOCK_HEIGHT + y - 10.0f, libVA("Tetris %s", TETRIS_VERSION));
@@ -156,7 +156,7 @@ void Glass::Draw(float x, float y)
 			}
 		}
 
-		DrawRectangleOutline(libVertex(x, y), libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y));
+		DrawRectangleOutline(libVertex(x, y), libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y), LIBC_BLACK);
 
 		// A Cell for a next new figure
 		engine->Draw2DQuad(libQuad(BLOCK_WIDTH * GLASS_WIDTH + x + 32.0f, y, BLOCK_WIDTH * GLASS_WIDTH + BLOCK_WIDTH * FIGURE_WIDTH + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f));
@@ -173,15 +173,15 @@ void Glass::Draw(float x, float y)
 			}
 		}
 
-		DrawRectangleOutline(libVertex(320.0f + x + 32.0f, y), libVertex(448 + x + 32.0f, 32.0f + y));
-		DrawRectangleOutline(libVertex(320.0f + x + 32.0f, 32.0f + y), libVertex(448.0f + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f));
+		DrawRectangleOutline(libVertex(320.0f + x + 32.0f, y), libVertex(448 + x + 32.0f, 32.0f + y), LIBC_BLACK);
+		DrawRectangleOutline(libVertex(320.0f + x + 32.0f, 32.0f + y), libVertex(448.0f + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f), LIBC_BLACK);
 
 		// Cells
 		for (int i = 0; i < 4; i++)
 		{
 			engine->Draw2DQuad(libQuad(320.0f + x + 32.0f, 190.0f + y + 96.0f * i, 448.0f + x + 32.0f, 254.0f + y + 96.0f * i));
-			DrawRectangleOutline(libVertex(320.0f + x + 32.0f, 190.0f + y + 96.0f * i), libVertex(448.0f + x + 32.0f, 222.0f + y + 96.0f * i));
-			DrawRectangleOutline(libVertex(320.0f + x + 32.0f, 222.0f + y + 96.0f * i), libVertex(448.0f + x + 32.0f, 254.0f + y + 96.0f * i));
+			DrawRectangleOutline(libVertex(320.0f + x + 32.0f, 190.0f + y + 96.0f * i), libVertex(448.0f + x + 32.0f, 222.0f + y + 96.0f * i), LIBC_BLACK);
+			DrawRectangleOutline(libVertex(320.0f + x + 32.0f, 222.0f + y + 96.0f * i), libVertex(448.0f + x + 32.0f, 254.0f + y + 96.0f * i), LIBC_BLACK);
 		}
 
 		fnt->Print2D(320.0f + x + 32.0f, y, "Next");
@@ -198,7 +198,7 @@ void Glass::Draw(float x, float y)
 		if (gameOver)
 		{
 			engine->Draw2DQuad(libQuad(58.0f + x, 168.0f + y, 270.0f + x, 200.0f + y));
-			DrawRectangleOutline(libVertex(58.0f + x, 168.0f + y), libVertex(58.0f + x, 168.0f + y));
+			DrawRectangleOutline(libVertex(58.0f + x, 168.0f + y), libVertex(270.0f + x, 200.0f + y), LIBC_BLACK);
 
 			if (score.Get() != MAX_SCORE)
 				fnt->Print2D(80.0f + x, 200.0f, "GAME OVER!");
@@ -318,12 +318,12 @@ void Glass::DrawBlock(float x, float y, color_t clrType, libClr clr) const
 Glass::DrawRectangleOutline
 ===================
 */
-void Glass::DrawRectangleOutline(libVertex v1, libVertex v2)
+void Glass::DrawRectangleOutline(libVertex v1, libVertex v2, libClr clr) const
 {
-	engine->Draw2DLine(libVertex(v1.x, v1.y, LIBC_BLACK), libVertex(v2.x, v1.y, LIBC_BLACK), 2.0f);
-	engine->Draw2DLine(libVertex(v2.x, v1.y, LIBC_BLACK), libVertex(v2.x, v2.y, LIBC_BLACK), 2.0f);
-	engine->Draw2DLine(libVertex(v2.x, v2.y, LIBC_BLACK), libVertex(v1.x, v2.y, LIBC_BLACK), 2.0f);
-	engine->Draw2DLine(libVertex(v1.x, v2.y, LIBC_BLACK), libVertex(v1.x, v1.y, LIBC_BLACK), 2.0f);
+	engine->Draw2DLine(libVertex(v1.x, v1.y, clr), libVertex(v2.x, v1.y, clr), 2.0f);
+	engine->Draw2DLine(libVertex(v2.x, v1.y, clr), libVertex(v2.x, v2.y, clr), 2.0f);
+	engine->Draw2DLine(libVertex(v2.x, v2.y, clr), libVertex(v1.x, v2.y, clr), 2.0f);
+	engine->Draw2DLine(libVertex(v1.x, v2.y, clr), libVertex(v1.x, v1.y, clr), 2.0f);
 }
 
 /*
@@ -475,15 +475,9 @@ Glass::IsThereFreeSpaceForFigure
 bool Glass::IsThereFreeSpaceForFigure() const
 {
 	for (int i = 0; i < FIGURE_WIDTH; i++)
-	{
 		for (int j = 0; j < FIGURE_HEIGHT; j++)
-		{
 			if (figure.blocks[i][j].filled && glass[figure.x+i][figure.y+j].filled)
-			{
 				return false;
-			}
-		}
-	}
 
 	return true;
 }
@@ -566,7 +560,7 @@ void Glass::MoveDown()
 		figure.New();
 		figure.x = (GLASS_WIDTH / 2) - (FIGURE_WIDTH / 2);
 
-		if (IsFigureDropped())
+		if (IsFigureDropped() || !IsThereFreeSpaceForFigure())
 			gameOver = true;
 	}
 }
@@ -587,7 +581,7 @@ void Glass::DropFigure()
 	figure.New();
 	figure.x = (GLASS_WIDTH / 2) - (FIGURE_WIDTH / 2);
 
-	if (IsFigureDropped())
+	if (IsFigureDropped() || !IsThereFreeSpaceForFigure())
 		gameOver = true;
 }
 
@@ -647,39 +641,17 @@ void Glass::RotateFigure()
 		if (!flag) MoveLeft();
 	} while (!flag);
 
-	// Don't allow to rotate the figure when it's below FIGURE_HEIGHT
-	if (figure.y > GLASS_HEIGHT-FIGURE_HEIGHT-1)
-	{
-		for (int i = FIGURE_HEIGHT-1; i >= GLASS_HEIGHT-figure.y-1; i--)
-		{
-			for (int j = 0; j < FIGURE_WIDTH; j++)
-			{
-				if (g_figures[figure.num][rot+1][j][i] && glass[figure.x+i][figure.y+j].filled)
-				{
-					flag = false;
-					break;
-				}
-
-				if (!flag)
-					break;
-			}
-		}
-	}
+	// Don't allow to rotate the figure when it's too low
+	for (int i = FIGURE_HEIGHT - 1; i >= 0; i--)
+		for (int j = 0; j < FIGURE_WIDTH; j++)
+			if (g_figures[figure.num][rot][j][i] && figure.y + j >= GLASS_HEIGHT)
+				return;
 
 	// Don't allow to rotate the figure if there are any other blocks
 	for (int i = 0; i < FIGURE_WIDTH; i++)
-	{
 		for (int j = 0; j < FIGURE_HEIGHT; j++)
-		{
-			if (g_figures[figure.num][figure.rot+1][j][i] & glass[figure.x+i][figure.y+j].filled & !g_figures[figure.num][figure.rot][j][i])
-			{
-				flag = false;
-				break;
-			}
-
-			if (!flag) break;
-		}
-	}
+			if (g_figures[figure.num][rot][j][i] & glass[figure.x + i][figure.y + j].filled & !g_figures[figure.num][figure.rot][j][i])
+				return;
 
 	if (flag) figure.Rotate();
 }
