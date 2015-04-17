@@ -107,11 +107,7 @@ libMain()
 		engine->SetState(LIB_RESIZABLE, false);
 		engine->SetState(LIB_FPS_LIMIT, 60);
 		engine->SetState(LIB_LOG_FILENAME, "Tetris.log");
-#ifdef LIB_DEBUG
 		engine->SetState(LIB_LOGFILE, true);
-#else
-		engine->SetState(LIB_LOGFILE, false);
-#endif
 		engine->SetState(LIB_INIT, Init);
 		engine->SetState(LIB_RENDER, Render);
 		engine->SetState(LIB_FRAME, Frame);
