@@ -30,9 +30,9 @@
 #define TETRIS_VERSION "1.0"
 
 #ifdef LIB_RELEASE
-	#define DATA_PACK		"Data.lpk//" 
+	#define DATA_PACK "Data.lpk//" 
 #else
-	#define DATA_PACK		"Data/"		
+	#define DATA_PACK "Data/"		
 #endif
 
 extern libEngine *engine;

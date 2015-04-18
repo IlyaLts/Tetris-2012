@@ -65,8 +65,8 @@ public:
 
 private:
 
-	void		DrawBlock(float x, float y, color_t clrType, libClr clr = libClr()) const;
-	void		DrawRectangleOutline(libVertex v1, libVertex v2, libClr clr) const;
+	void		DrawBlock(float x, float y, color_t clrType, const libClr &clr = libClr()) const;
+	void		DrawRectangleOutline(const libVertex &v1, const libVertex &v2, const libClr &clr) const;
 
 	void		NewGame();
 	void		BuildFigureIntoGlass();

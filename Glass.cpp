@@ -295,7 +295,7 @@ void Glass::SaveRecord()
 Glass::DrawBlock
 ===================
 */
-void Glass::DrawBlock(float x, float y, color_t clrType, libClr clr) const
+void Glass::DrawBlock(float x, float y, color_t clrType, const libClr &clr) const
 {
 	if (clrType == CYAN)
 		blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_WIDTH, BLOCK_HEIGHT, 0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, x, y, clr);
@@ -318,7 +318,7 @@ void Glass::DrawBlock(float x, float y, color_t clrType, libClr clr) const
 Glass::DrawRectangleOutline
 ===================
 */
-void Glass::DrawRectangleOutline(libVertex v1, libVertex v2, libClr clr) const
+void Glass::DrawRectangleOutline(const libVertex &v1, const libVertex &v2, const libClr &clr) const
 {
 	engine->Draw2DLine(libVertex(v1.x, v1.y, clr), libVertex(v2.x, v1.y, clr), 2.0f);
 	engine->Draw2DLine(libVertex(v2.x, v1.y, clr), libVertex(v2.x, v2.y, clr), 2.0f);
