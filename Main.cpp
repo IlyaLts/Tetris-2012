@@ -23,8 +23,8 @@
 #include "Glass.h"
 #include "Figure.h"
 
-libEngine *engine		= nullptr;
-libTexture *background	= nullptr;
+libEngine *engine = nullptr;
+libTexture *background = nullptr;
 
 Glass gameGlass;
 
@@ -107,7 +107,7 @@ libMain()
 		engine->SetState(LIB_RESIZABLE, false);
 		engine->SetState(LIB_FPS_LIMIT, 60);
 		engine->SetState(LIB_LOG_FILENAME, "Tetris.log");
-		engine->SetState(LIB_LOGFILE, true);
+		engine->SetState(LIB_LOG_FILE, true);
 		engine->SetState(LIB_INIT, Init);
 		engine->SetState(LIB_RENDER, Render);
 		engine->SetState(LIB_FRAME, Frame);
