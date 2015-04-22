@@ -97,9 +97,9 @@ void Glass::Draw(float x, float y)
 		fnt->Print2D(10.0f + x, BLOCK_HEIGHT * 5 + y, "Space - Drop the figure.");
 		fnt->Print2D(10.0f + x, BLOCK_HEIGHT * 6 + y, "G - Turn on/off the ghost.");
 		fnt->Print2D(10.0f + x, BLOCK_HEIGHT * 7 + y, "F12 - Take a screenshot.");
-		fnt->SetScale(0.8f, 0.8f);
+		fnt->SetScale(libVec3(0.8f, 0.8f, 0.0f));
 		fnt->Print2D(10.0f + x, HEIGHT - BLOCK_HEIGHT * 3.0f - 20.0f + y, "Copyright (C) 2012 Ilya Lyakhovets");
-		fnt->SetScale(1.0f, 1.0f);
+		fnt->SetScale(libVec3(1.0f, 1.0f, 0.0f));
 	}
 	else
 	{
@@ -594,6 +594,9 @@ Glass::RotateFigure
 void Glass::RotateFigure()
 {
 	bool flag;
+	bool allowRotate = true;
+	int xOld = figure.x;
+	int yOld = figure.y;
 
 	int rot = figure.rot + 1;
 	if (rot == ROTATIONS_OF_FIGURE) rot = 0;
@@ -640,13 +643,21 @@ void Glass::RotateFigure()
 	for (int i = FIGURE_HEIGHT - 1; i >= 0; i--)
 		for (int j = 0; j < FIGURE_WIDTH; j++)
 			if (g_figures[figure.num][rot][j][i] && figure.y + j >= GLASS_HEIGHT)
-				return;
+				allowRotate = false;
 
 	// Don't allow to rotate the figure if there are any other blocks
 	for (int i = 0; i < FIGURE_WIDTH; i++)
 		for (int j = 0; j < FIGURE_HEIGHT; j++)
 			if (g_figures[figure.num][rot][j][i] & glass[figure.x + i][figure.y + j].filled & !g_figures[figure.num][figure.rot][j][i])
-				return;
+				allowRotate = false;
 
-	if (flag) figure.Rotate();
+	if (allowRotate)
+	{
+		figure.Rotate();
+	}
+	else
+	{
+		figure.x = xOld;
+		figure.y = yOld;
+	}
 }
