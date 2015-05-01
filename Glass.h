@@ -61,10 +61,11 @@ public:
 
 	void		Draw(float x, float y);
 	void		Update();
-	void		SaveRecord();
 
 private:
 
+	void		SaveRecord();
+	
 	void		DrawBlock(float x, float y, color_t clrType, const libClr &clr = libClr()) const;
 	void		DrawRectangleOutline(const libQuad &quad, const libClr &clr) const;
 

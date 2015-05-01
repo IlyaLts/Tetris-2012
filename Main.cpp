@@ -63,12 +63,7 @@ Frame
 */
 bool Frame()
 {
-	if (engine->IsKeyDown(LIBK_ESCAPE))
-	{
-		gameGlass.SaveRecord();
-		return false;
-	}
-
+	if (engine->IsKeyDown(LIBK_ESCAPE)) return false;
 	if (engine->IsKeyDown(LIBK_F12)) engine->SysScreenshot("Screenshots/");
 
 	gameGlass.Update();

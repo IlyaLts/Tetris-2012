@@ -45,7 +45,7 @@ void Glass::Init()
 	engine->Get_libSound(drop, DATA_PACK "Drop.wav", false, true);
 	engine->Get_libTexture(blocks, DATA_PACK "Blocks.png", true);
 
-	fnt->SetColor(libClr(LIBC_BLACK));
+	fnt->SetColor(LIBC_BLACK);
 	
 	// Config reading
 	cfg.Load("Tetris.cfg", DATA_PACK "Tetris.cfg");
@@ -489,13 +489,13 @@ Glass::MoveLeft
 */
 void Glass::MoveLeft()
 {
+	if (figure.x == 0)
+		return;
+
 	for (int i = 0; i < FIGURE_WIDTH; i++)
 	{
 		for (int j = 0; j < FIGURE_HEIGHT; j++)
 		{
-			if (figure.blocks[i][j].filled && figure.x + i == 0)
-				return;
-
 			if (i != 0)
 			{
 				if (figure.blocks[i][j].filled && glass[figure.x+i-1][figure.y+j].filled && !figure.blocks[i-1][j].filled)
@@ -519,13 +519,13 @@ Glass::MoveRight
 */
 void Glass::MoveRight()
 {
+	if (figure.x == GLASS_WIDTH - 1)
+		return;
+
 	for (int i = FIGURE_WIDTH - 1; i >= 0; i--)
 	{
 		for (int j = 0; j < FIGURE_HEIGHT; j++)
 		{
-			if (figure.blocks[i][j].filled && figure.x + i == GLASS_WIDTH - 1)
-				return;
-
 			if (i+1 < FIGURE_WIDTH)
 			{
 				if (figure.blocks[i][j].filled && glass[figure.x+i+1][figure.y+j].filled && !figure.blocks[i+1][j].filled)
