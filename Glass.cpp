@@ -261,6 +261,19 @@ void Glass::Update()
 			fallDelay.Restart();
 			DropFigure();
 		}
+
+		if (IsFigureDropped())
+		{
+			BuildFigureIntoGlass();
+			RemoveFilledLines();
+			drop->Play();
+
+			figure.New();
+			figure.x = (GLASS_WIDTH / 2) - (FIGURE_WIDTH / 2);
+
+			if (IsFigureDropped() || !IsThereFreeSpaceForFigure())
+				gameOver = true;
+		}
 	}
 	else
 	{
@@ -365,8 +378,8 @@ void Glass::BuildFigureIntoGlass()
 		{
 			if (figure.blocks[i][j].filled)
 			{
-				glass[figure.x+i][figure.y+j].filled = true;
-				glass[figure.x+i][figure.y+j].clr = figure.blocks[i][j].clr;
+				glass[figure.x + i][figure.y + j].filled = true;
+				glass[figure.x + i][figure.y + j].clr = figure.blocks[i][j].clr;
 			}
 		}
 	}
@@ -381,7 +394,7 @@ void Glass::RemoveFilledLines()
 {
 	int numOfFilledLines = 0;
 
-	for (int i = GLASS_HEIGHT-1; i > 0; i--)
+	for (int i = GLASS_HEIGHT - 1; i > 0; i--)
 	{
 		bool filled = true;
 
@@ -455,10 +468,10 @@ bool Glass::IsFigureDropped() const
 		{
 			if (figure.blocks[i][j].filled)
 			{
-				if (figure.blocks[i][j+1].filled && glass[figure.x+i][figure.y+j+1].filled)
+				if (figure.blocks[i][j + 1].filled && glass[figure.x + i][figure.y + j + 1].filled)
 					continue;
 
-				if (figure.y+j+1 == GLASS_HEIGHT || glass[figure.x+i][figure.y+j+1].filled)
+				if (figure.y + j + 1 == GLASS_HEIGHT || glass[figure.x + i][figure.y + j + 1].filled)
 					return true;
 			}
 		}
@@ -476,7 +489,7 @@ bool Glass::IsThereFreeSpaceForFigure() const
 {
 	for (int i = 0; i < FIGURE_WIDTH; i++)
 		for (int j = 0; j < FIGURE_HEIGHT; j++)
-			if (figure.blocks[i][j].filled && glass[figure.x+i][figure.y+j].filled)
+			if (figure.blocks[i][j].filled && glass[figure.x + i][figure.y + j].filled)
 				return false;
 
 	return true;
@@ -489,23 +502,15 @@ Glass::MoveLeft
 */
 void Glass::MoveLeft()
 {
-	if (figure.x == 0)
-		return;
-
 	for (int i = 0; i < FIGURE_WIDTH; i++)
 	{
 		for (int j = 0; j < FIGURE_HEIGHT; j++)
 		{
-			if (i != 0)
-			{
-				if (figure.blocks[i][j].filled && glass[figure.x+i-1][figure.y+j].filled && !figure.blocks[i-1][j].filled)
-					return;
-			}
-			else
-			{
-				if (figure.blocks[i][j].filled && glass[figure.x+i-1][figure.y+j].filled)
-					return;
-			}
+			if (figure.x + i <= 0 && figure.blocks[i][j].filled)
+				return;
+
+			if (figure.blocks[i][j].filled && glass[figure.x + i - 1][figure.y + j].filled && !figure.blocks[i - 1][j].filled)
+				return;
 		}
 	}
 
@@ -519,23 +524,15 @@ Glass::MoveRight
 */
 void Glass::MoveRight()
 {
-	if (figure.x == GLASS_WIDTH - 1)
-		return;
-
 	for (int i = FIGURE_WIDTH - 1; i >= 0; i--)
 	{
 		for (int j = 0; j < FIGURE_HEIGHT; j++)
 		{
-			if (i+1 < FIGURE_WIDTH)
-			{
-				if (figure.blocks[i][j].filled && glass[figure.x+i+1][figure.y+j].filled && !figure.blocks[i+1][j].filled)
-					return;
-			}
-			else
-			{
-				if (figure.blocks[i][j].filled && glass[figure.x+i+1][figure.y+j].filled)
-					return;
-			}
+			if (figure.x + i >= GLASS_WIDTH - 1 && figure.blocks[i][j].filled)
+				return;
+
+			if (figure.blocks[i][j].filled && glass[figure.x + i + 1][figure.y + j].filled && !figure.blocks[i + 1][j].filled)
+				return;
 		}
 	}
 
@@ -549,21 +546,7 @@ Glass::MoveDown
 */
 void Glass::MoveDown()
 {
-	if (!IsFigureDropped())
-		figure.y++;
-
-	if (IsFigureDropped())
-	{
-		BuildFigureIntoGlass();
-		RemoveFilledLines();
-		drop->Play();
-
-		figure.New();
-		figure.x = (GLASS_WIDTH / 2) - (FIGURE_WIDTH / 2);
-
-		if (IsFigureDropped() || !IsThereFreeSpaceForFigure())
-			gameOver = true;
-	}
+	if (!IsFigureDropped()) figure.y++;
 }
 
 /*
@@ -573,17 +556,7 @@ Glass::DropFigure
 */
 void Glass::DropFigure()
 {
-	while (!IsFigureDropped()) figure.y++;
-	
-	BuildFigureIntoGlass();
-	RemoveFilledLines();
-	drop->Play();
-
-	figure.New();
-	figure.x = (GLASS_WIDTH / 2) - (FIGURE_WIDTH / 2);
-
-	if (IsFigureDropped() || !IsThereFreeSpaceForFigure())
-		gameOver = true;
+	while (!IsFigureDropped()) MoveDown();
 }
 
 /*
@@ -596,7 +569,6 @@ void Glass::RotateFigure()
 	bool flag;
 	bool allowRotate = true;
 	int xOld = figure.x;
-	int yOld = figure.y;
 
 	int rot = figure.rot + 1;
 	if (rot == ROTATIONS_OF_FIGURE) rot = 0;
@@ -652,12 +624,7 @@ void Glass::RotateFigure()
 				allowRotate = false;
 
 	if (allowRotate)
-	{
 		figure.Rotate();
-	}
 	else
-	{
 		figure.x = xOld;
-		figure.y = yOld;
-	}
 }
