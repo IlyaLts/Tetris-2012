@@ -224,38 +224,38 @@ void Glass::Update()
 
 	if (!gameOver)
 	{
-		// Down the figure
+		// Move the figure down every the delay time
 		if (fallDelay.Get() >= delay)
 		{
 			fallDelay.Restart();
 			MoveDown();
 		}
 
-		// Move left
+		// Move the figure left
 		if ((engine->IsKey(LIBK_A) || engine->IsKey(LIBK_LEFT)) && rightFigureDelay.Get() >= keyDelay)
 		{
 			rightFigureDelay.Restart();
 			MoveLeft();
 		}
-		// Move right
+		// Move the figure right
 		if ((engine->IsKey(LIBK_D) || engine->IsKey(LIBK_RIGHT)) && rightFigureDelay.Get() >= keyDelay)
 		{
 			rightFigureDelay.Restart();
 			MoveRight();
 		}
-		// Move down
+		// Move the figure down
 		if ((engine->IsKey(LIBK_S) || engine->IsKey(LIBK_DOWN)) && downFigureDelay.Get() >= keyDelay)
 		{
 			fallDelay.Restart();
 			downFigureDelay.Restart();
 			MoveDown();
 		}
-		// Rotate Figure
+		// Rotate the figure
 		if (engine->IsKeyDown(LIBK_W) || engine->IsKeyDown(LIBK_UP))
 		{
 			RotateFigure();
 		}
-		// Drop figure
+		// Drop the figure
 		if (engine->IsKeyDown(LIBK_SPACE))
 		{
 			fallDelay.Restart();
