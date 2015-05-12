@@ -8,6 +8,8 @@ for /d /r . %%d in (_DEBUG_64_) do @if exist "%%d" rd /s /q "%%d"
 for /d /r . %%d in (_RELEASE_32_) do @if exist "%%d" rd /s /q "%%d"
 for /d /r . %%d in (_RELEASE_64_) do @if exist "%%d" rd /s /q "%%d"
 
+del *.log /f /s /q /a
+
 :: MSVC Files
 del *.ncb /f /s /q /a
 del *.sdf /f /s /q /a
