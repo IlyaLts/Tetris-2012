@@ -69,7 +69,7 @@ bool Frame()
 	gameGlass.Update();
 
 #ifdef LIB_DEBUG
-	engine->SetState(LIB_TITLE, libVA("Tetris FPS: %d", engine->GetFPS()));
+	engine->SetState(LIB_TITLE, libVA("Tetris 2012 FPS: %d", engine->GetFPS()));
 #endif
 
 	return true;
@@ -96,8 +96,8 @@ libMain()
 {
 	if (libGetEngine(engine))
 	{
-		engine->SetState(LIB_TITLE, "Tetris");
-		engine->SetState(LIB_CLASS_NAME, "Tetris");
+		engine->SetState(LIB_TITLE, "Tetris 2012");
+		engine->SetState(LIB_CLASS_NAME, "Tetris 2012");
 		engine->SetState(LIB_RESOLUTION, WIDTH, HEIGHT);
 		engine->SetState(LIB_RESIZABLE, false);
 		engine->SetState(LIB_FPS_LIMIT, 60);

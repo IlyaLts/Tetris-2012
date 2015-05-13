@@ -90,7 +90,7 @@ void Glass::Draw(float x, float y)
 		DrawRectangleOutline(libQuad(x, y, WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT), LIBC_BLACK);
 
 		// Help
-		fnt->Print2D(150.0f + x, BLOCK_HEIGHT + y - 10.0f, libVA("Tetris %s", TETRIS_VERSION));
+		fnt->Print2D(80.0f + x, BLOCK_HEIGHT + y - 10.0f, libVA("Tetris 2012 ver. %s", TETRIS_VERSION));
 		fnt->Print2D(10.0f + x, BLOCK_HEIGHT * 2 + y, "Up - Rotate the figure.");
 		fnt->Print2D(10.0f + x, BLOCK_HEIGHT * 3 + y, "Left/Right - Move the figure.");
 		fnt->Print2D(10.0f + x, BLOCK_HEIGHT * 4 + y, "Down - Down the figure.");
