@@ -56,7 +56,7 @@ public:
 
 				Glass();
 
-	void		Init();
+	bool		Init();
 	void		Free();
 
 	void		Draw(float x, float y);

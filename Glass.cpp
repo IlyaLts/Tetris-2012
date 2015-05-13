@@ -39,11 +39,11 @@ Glass::Glass()
 Glass::Init
 ===================
 */
-void Glass::Init()
+bool Glass::Init()
 {
-	engine->Get_libFont(fnt, DATA_PACK "Font.png", true);
-	engine->Get_libSound(drop, DATA_PACK "Drop.wav", false, true);
-	engine->Get_libTexture(blocks, DATA_PACK "Blocks.png", true);
+	if (!engine->Get_libFont(fnt, DATA_PACK "Font.png", true)) return false;
+	if (!engine->Get_libSound(drop, DATA_PACK "Drop.wav", false, true)) return false;
+	if (!engine->Get_libTexture(blocks, DATA_PACK "Blocks.png", true)) return false;
 
 	fnt->SetColor(LIBC_BLACK);
 	
@@ -58,6 +58,8 @@ void Glass::Init()
 	f.Close();
 
 	NewGame();
+
+	return true;
 }
 
 /*
