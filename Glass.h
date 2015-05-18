@@ -81,14 +81,12 @@ private:
 	void		DropFigure();
 	void		RotateFigure();
 
-	libFont *	fnt;
+	libFont *	font;
 	libTexture *blocks;
 	libSound *	drop;
 
 	Block		glass[GLASS_WIDTH][GLASS_HEIGHT];
 	Figure		figure;
-
-	libCfg		cfg;
 
 	bool		gameOver;
 	bool		help;
@@ -104,6 +102,8 @@ private:
 	libTimer	leftFigureDelay;
 	libTimer	rightFigureDelay;
 	libTimer	downFigureDelay;
+
+	libCfg		cfg;
 };
 
 #endif // !__GLASS_H__

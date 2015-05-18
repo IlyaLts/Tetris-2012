@@ -30,7 +30,7 @@ Glass::Glass
 Glass::Glass()
 {
 	help = false;
-	fnt = nullptr;
+	font = nullptr;
 	drop = nullptr;
 }
 
@@ -41,11 +41,11 @@ Glass::Init
 */
 bool Glass::Init()
 {
-	if (!engine->Get_libFont(fnt, DATA_PACK "Font.png", true)) return false;
+	if (!engine->Get_libFont(font, DATA_PACK "Font.png", true)) return false;
 	if (!engine->Get_libSound(drop, DATA_PACK "Drop.wav", false, true)) return false;
 	if (!engine->Get_libTexture(blocks, DATA_PACK "Blocks.png", true)) return false;
 
-	fnt->SetColor(LIBC_BLACK);
+	font->SetColor(LIBC_BLACK);
 	
 	// Config reading
 	cfg.Load("Tetris.cfg", DATA_PACK "Tetris.cfg");
@@ -73,7 +73,7 @@ void Glass::Free()
 	cfg.Save();
 	cfg.Unload();
 
-	engine->Free_libFont(fnt);
+	engine->Free_libFont(font);
 	engine->Free_libSound(drop);
 	engine->Free_libTexture(blocks);
 }
@@ -91,18 +91,18 @@ void Glass::Draw(float x, float y)
 		engine->Draw2DQuad(libQuad(x, y, WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT));
 		DrawRectangleOutline(libQuad(x, y, WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT), LIBC_BLACK);
 
-		// Help
-		fnt->Print2D(80.0f + x, BLOCK_HEIGHT + y - 10.0f, libVA("Tetris 2012 ver. %s", TETRIS_VERSION));
-		fnt->Print2D(10.0f + x, BLOCK_HEIGHT * 2 + y, "Up - Rotate the figure.");
-		fnt->Print2D(10.0f + x, BLOCK_HEIGHT * 3 + y, "Left - Move the figure left.");
-		fnt->Print2D(10.0f + x, BLOCK_HEIGHT * 4 + y, "Right - Move the figure right.");
-		fnt->Print2D(10.0f + x, BLOCK_HEIGHT * 5 + y, "Down - Move the figure down.");
-		fnt->Print2D(10.0f + x, BLOCK_HEIGHT * 6 + y, "Space - Drop the figure.");
-		fnt->Print2D(10.0f + x, BLOCK_HEIGHT * 7 + y, "G - Turn on/off the ghost.");
-		fnt->Print2D(10.0f + x, BLOCK_HEIGHT * 8 + y, "F12 - Take a screenshot.");
-		fnt->SetScale(libVec3(0.8f, 0.8f, 0.0f));
-		fnt->Print2D(10.0f + x, HEIGHT - BLOCK_HEIGHT * 3.0f - 20.0f + y, "Copyright (C) 2012 Ilya Lyakhovets");
-		fnt->SetScale(libVec3(1.0f, 1.0f, 0.0f));
+		// Help	
+		font->Print2D(80.0f + x, BLOCK_HEIGHT + y - 10.0f, libVA("Tetris 2012 ver. %s", TETRIS_VERSION));
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 2 + y, "Up - Rotate the figure.");
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 3 + y, "Left - Move the figure left.");
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 4 + y, "Right - Move the figure right.");
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 5 + y, "Down - Move the figure down.");
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 6 + y, "Space - Drop the figure.");
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 7 + y, "G - Turn on/off the ghost.");
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 8 + y, "F12 - Take a screenshot.");
+		font->SetScale(libVec3(0.8f, 0.8f, 0.0f));
+		font->Print2D(10.0f + x, HEIGHT - BLOCK_HEIGHT * 3.0f - 20.0f + y, "Copyright (C) 2012 Ilya Lyakhovets");
+		font->SetScale(libVec3(1.0f, 1.0f, 0.0f));
 	}
 	else
 	{
@@ -187,15 +187,15 @@ void Glass::Draw(float x, float y)
 			DrawRectangleOutline(libQuad(320.0f + x + 32.0f, 222.0f + y + 96.0f * i, 448.0f + x + 32.0f, 254.0f + y + 96.0f * i), LIBC_BLACK);
 		}
 
-		fnt->Print2D(320.0f + x + 32.0f, y, "Next");
-		fnt->Print2D(320.0f + x + 32.0f, 190.0f + y, "Score");
-		fnt->Print2D(320.0f + x + 32.0f, 222.0f + y, "%d", score.Get());
-		fnt->Print2D(320.0f + x + 32.0f, 286.0f + y, "Goal");
-		fnt->Print2D(320.0f + x + 32.0f, 318.0f + y, "%d", scoreGoal.Get());
-		fnt->Print2D(320.0f + x + 32.0f, 382.0f + y, "Level");
-		fnt->Print2D(320.0f + x + 32.0f, 412.0f + y, "%d", level.Get());
-		fnt->Print2D(320.0f + x + 32.0f, 476.0f + y, "Record");
-		fnt->Print2D(320.0f + x + 32.0f, 508.0f + y, "%d", record.Get());
+		font->Print2D(320.0f + x + 32.0f, y, "Next");
+		font->Print2D(320.0f + x + 32.0f, 190.0f + y, "Score");
+		font->Print2D(320.0f + x + 32.0f, 222.0f + y, "%d", score.Get());
+		font->Print2D(320.0f + x + 32.0f, 286.0f + y, "Goal");
+		font->Print2D(320.0f + x + 32.0f, 318.0f + y, "%d", scoreGoal.Get());
+		font->Print2D(320.0f + x + 32.0f, 382.0f + y, "Level");
+		font->Print2D(320.0f + x + 32.0f, 412.0f + y, "%d", level.Get());
+		font->Print2D(320.0f + x + 32.0f, 476.0f + y, "Record");
+		font->Print2D(320.0f + x + 32.0f, 508.0f + y, "%d", record.Get());
 
 		// Draw "game over" table
 		if (gameOver)
@@ -204,9 +204,9 @@ void Glass::Draw(float x, float y)
 			DrawRectangleOutline(libQuad(BLOCK_WIDTH * 2 + x, BLOCK_HEIGHT * 5 + y, BLOCK_WIDTH * 8 + x, BLOCK_HEIGHT * 6 + y), LIBC_BLACK);
 
 			if (score.Get() != MAX_SCORE)
-				fnt->Print2D(BLOCK_WIDTH * 2 + BLOCK_WIDTH / 2 + x, BLOCK_HEIGHT * 5 + y, "GAME OVER!");
+				font->Print2D(BLOCK_WIDTH * 2 + BLOCK_WIDTH / 2 + x, BLOCK_HEIGHT * 5 + y, "GAME OVER!");
 			else
-				fnt->Print2D(BLOCK_WIDTH * 2 + BLOCK_WIDTH / 2 + x, BLOCK_HEIGHT * 5 + y, "MAX SCORE!");
+				font->Print2D(BLOCK_WIDTH * 2 + BLOCK_WIDTH / 2 + x, BLOCK_HEIGHT * 5 + y, "MAX SCORE!");
 		}
 	}
 }
