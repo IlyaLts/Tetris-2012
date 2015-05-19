@@ -24,24 +24,24 @@
 
 #include "Figure.h"
 
-#define NUMBER_OF_LEVELS		15
-#define FIGURE_DELAY			1.0f
-#define FIGURE_DELAY_DECREASE	0.05f
+#define NUMBER_OF_LEVELS			15
+#define FIGURE_FALL_DELAY			1.0f
+#define FIGURE_FALL_DELAY_DECREASE	0.05f
 
-#define SCORE_FOR_1_LINE		10
-#define SCORE_FOR_2_LINES		30
-#define SCORE_FOR_3_LINES		60
-#define SCORE_FOR_4_LINES		100
-#define	STARTUP_SCORE_GOAL		100
-#define SCORE_GOAL_MULTIPLIER	2
-#define MAX_SCORE				999999
+#define SCORE_FOR_1_LINE			10
+#define SCORE_FOR_2_LINES			30
+#define SCORE_FOR_3_LINES			60
+#define SCORE_FOR_4_LINES			100
+#define	STARTUP_SCORE_GOAL			100
+#define SCORE_GOAL_MULTIPLIER		2
+#define MAX_SCORE					999999
 
-#define BLOCK_WIDTH				32
-#define BLOCK_HEIGHT			32
-#define BLOCK_GHOST_COLOR		libClr(1.0f, 1.0f, 1.0f, 0.33f)
+#define BLOCK_WIDTH					32
+#define BLOCK_HEIGHT				32
+#define BLOCK_GHOST_COLOR			libClr(1.0f, 1.0f, 1.0f, 0.33f)
 
-#define GLASS_WIDTH				10
-#define GLASS_HEIGHT			20
+#define GLASS_WIDTH					10
+#define GLASS_HEIGHT				20
 
 /*
 ===============================================================================
@@ -96,7 +96,6 @@ private:
 	libHolder	level;
 	libHolder	record;
 
-	float		delay;
 	float		keyDelay;
 	libTimer	fallDelay;
 	libTimer	leftFigureDelay;

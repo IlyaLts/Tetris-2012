@@ -228,7 +228,7 @@ void Glass::Update()
 	if (!gameOver)
 	{
 		// Move the figure down every the delay time
-		if (fallDelay.Get() >= delay)
+		if (fallDelay.Get() >= FIGURE_FALL_DELAY - FIGURE_FALL_DELAY_DECREASE * level.Get())
 		{
 			fallDelay.Restart();
 			MoveDown();
@@ -361,7 +361,6 @@ void Glass::NewGame()
 	scoreGoal.Set(STARTUP_SCORE_GOAL);
 	level.Set(1);
 
-	delay = FIGURE_DELAY;
 	fallDelay.Restart();
 	leftFigureDelay.Restart();
 	rightFigureDelay.Restart();
@@ -451,8 +450,6 @@ void Glass::RemoveFilledLines()
 			}
 
 			level.Set(level.Get() + 1);
-			delay -= FIGURE_DELAY_DECREASE;
-
 			scoreGoal.Set(scoreGoal.Get() * SCORE_GOAL_MULTIPLIER);
 		}
 	}
