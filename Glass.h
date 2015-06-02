@@ -71,7 +71,7 @@ private:
 	void		BuildFigureIntoGlass();
 	void		RemoveFilledLines();
 	bool		IsFigureDropped() const;
-	bool		IsThereFreeSpaceForFigure() const;
+	bool		IsThereFreeSpaceForNewFigure() const;
 
 	void		MoveLeft();
 	void		MoveRight();

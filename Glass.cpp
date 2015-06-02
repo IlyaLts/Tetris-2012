@@ -108,7 +108,7 @@ void Glass::Draw(float x, float y)
 		engine->Draw2DQuad(libQuad(x, y, BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y));
 		
 		// Draw the figure
-		if (IsThereFreeSpaceForFigure())
+		if (IsThereFreeSpaceForNewFigure())
 		{
 			for (int i = 0; i < FIGURE_WIDTH; i++)
 			{
@@ -272,7 +272,7 @@ void Glass::Update()
 			figure.New();
 			figure.x = (GLASS_WIDTH / 2) - (FIGURE_WIDTH / 2);
 
-			if (IsFigureDropped() || !IsThereFreeSpaceForFigure())
+			if (IsFigureDropped() || !IsThereFreeSpaceForNewFigure())
 				gameOver = true;
 		}
 	}
@@ -480,10 +480,10 @@ bool Glass::IsFigureDropped() const
 
 /*
 ===================
-Glass::IsThereFreeSpaceForFigure
+Glass::IsThereFreeSpaceForNewFigure
 ===================
 */
-bool Glass::IsThereFreeSpaceForFigure() const
+bool Glass::IsThereFreeSpaceForNewFigure() const
 {
 	for (int i = 0; i < FIGURE_WIDTH; i++)
 		for (int j = 0; j < FIGURE_HEIGHT; j++)
