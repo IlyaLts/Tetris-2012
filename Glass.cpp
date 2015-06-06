@@ -89,15 +89,18 @@ void Glass::Draw(float x, float y)
 		engine->Draw2DQuad(libQuad(x, y, WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT));
 		DrawRectangleOutline(libQuad(x, y, WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT), LIBC_BLACK);
 
-		// Help	
+		// Help
+		font->SetIndent(font->GetIndent() - 2.5f);
 		font->Print2D(80.0f + x, BLOCK_HEIGHT + y - 10.0f, libVA("Tetris 2012 ver. %s", TETRIS_VERSION));
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 2 + y, "Up - Rotate the figure.");
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 3 + y, "Left - Move the figure left.");
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 4 + y, "Right - Move the figure right.");
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 5 + y, "Down - Move the figure down.");
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 2 + y, "W / Up - Rotate the figure.");
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 3 + y, "A / Left - Move the figure left.");
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 4 + y, "D / Right - Move the figure right.");
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 5 + y, "S / Down - Move the figure down.");
 		font->Print2D(10.0f + x, BLOCK_HEIGHT * 6 + y, "Space - Drop the figure.");
 		font->Print2D(10.0f + x, BLOCK_HEIGHT * 7 + y, "G - Turn on/off the ghost.");
 		font->Print2D(10.0f + x, BLOCK_HEIGHT * 8 + y, "F12 - Take a screenshot.");
+		font->SetIndent(font->GetIndent() + 2.5f);
+
 		font->SetScale(libVec3(0.8f, 0.8f, 0.0f));
 		font->Print2D(10.0f + x, HEIGHT - BLOCK_HEIGHT * 3.0f - 20.0f + y, "Copyright (C) 2012 Ilya Lyakhovets");
 		font->SetScale(libVec3(1.0f, 1.0f, 0.0f));
@@ -202,9 +205,9 @@ void Glass::Draw(float x, float y)
 			DrawRectangleOutline(libQuad(BLOCK_WIDTH * 2 + x, BLOCK_HEIGHT * 5 + y, BLOCK_WIDTH * 8 + x, BLOCK_HEIGHT * 6 + y), LIBC_BLACK);
 
 			if (score.Get() != MAX_SCORE)
-				font->Print2D(BLOCK_WIDTH * 2 + BLOCK_WIDTH / 2 + x, BLOCK_HEIGHT * 5 + y, "GAME OVER!");
+				font->Print2D(BLOCK_WIDTH * 2 + BLOCK_WIDTH / 4 + x, BLOCK_HEIGHT * 5 + y, "GAME OVER!");
 			else
-				font->Print2D(BLOCK_WIDTH * 2 + BLOCK_WIDTH / 2 + x, BLOCK_HEIGHT * 5 + y, "MAX SCORE!");
+				font->Print2D(BLOCK_WIDTH * 2 + BLOCK_WIDTH / 4 + x, BLOCK_HEIGHT * 5 + y, "MAX SCORE!");
 		}
 	}
 }

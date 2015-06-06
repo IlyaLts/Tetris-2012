@@ -4,10 +4,10 @@ A Tetris remake.
 
 Controls
 ---------
-Up - Rotate the figure.
-Left - Move the figure left.
-Right - Move the figure right.
-Down - Move the figure down.
+W / Up - Rotate the figure.
+A / Left - Move the figure left.
+D / Right - Move the figure right.
+S / Down - Move the figure down.
 Space - Drop the figure.
 G - Turn on/off the ghost of the figure.
 F1 - Help.
