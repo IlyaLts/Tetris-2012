@@ -15,10 +15,10 @@ F12 - Take a screenshot.
 
 Scoring
 --------
-1 line at once = 10 x level
-2 lines at once = 30 x level
-3 lines at once = 60 x level
-4 lines at once = 100 x level
+Points for 1 line = 10 x level
+Points for 2 lines = 30 x level
+Points for 3 lines = 60 x level
+Points for 4 lines = 100 x level
 
 Notes
 ------
