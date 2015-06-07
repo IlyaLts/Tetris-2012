@@ -78,7 +78,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>Tetris\</OutDir>
+    <OutDir>Tetris-2012\</OutDir>
     <IntDir>_DEBUG_32_\</IntDir>
     <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
     <PreLinkEventUseInBuild>false</PreLinkEventUseInBuild>
@@ -91,12 +91,12 @@
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
     <TargetName>$(ProjectName)_dbg</TargetName>
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>Tetris\</OutDir>
+    <OutDir>Tetris-2012\</OutDir>
     <IntDir>_DEBUG_64_\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>Tetris\</OutDir>
+    <OutDir>Tetris-2012\</OutDir>
     <IntDir>_RELEASE_32_\</IntDir>
     <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
     <PreLinkEventUseInBuild>false</PreLinkEventUseInBuild>
@@ -108,7 +108,7 @@
     <PreLinkEventUseInBuild>false</PreLinkEventUseInBuild>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>Tetris\</OutDir>
+    <OutDir>Tetris-2012\</OutDir>
     <IntDir>_RELEASE_64_\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
