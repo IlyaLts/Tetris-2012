@@ -1,5 +1,3 @@
-# Build.sh
-
 mkdir Release
 cd Release
 

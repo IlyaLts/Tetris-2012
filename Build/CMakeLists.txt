@@ -1,11 +1,4 @@
-# CMakeLists.txt
-#
 # Project: Tetris
-#
-# Currently build for the following:
-#	Win32
-#	Linux i386
-#
 # CMake required
 
 cmake_minimum_required (VERSION 2.8)

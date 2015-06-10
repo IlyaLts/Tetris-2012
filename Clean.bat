@@ -1,5 +1,3 @@
-:: Clean.bat
-
 @echo off
 
 for /d /r . %%d in (ipch) do @if exist "%%d" rd /s /q "%%d"
