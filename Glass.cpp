@@ -48,6 +48,12 @@ bool Glass::Init()
 	// Config reading
 	cfg.Load("Tetris.cfg", DATA_PACK "Tetris.cfg");
 	keyDelay = cfg.GetFloat("KeyDelay", 0.15f);
+
+	if (cfg.GetBool("soundEnabled", true))
+		engine->SetState(LIB_VOLUME, 1.0f);
+	else
+		engine->SetState(LIB_VOLUME, 0.0f);
+
 	ghostEnabled = cfg.GetBool("ghostEnabled", false);
 
 	// Record reading
@@ -97,8 +103,9 @@ void Glass::Draw(float x, float y)
 		font->Print2D(10.0f + x, BLOCK_HEIGHT * 4 + y, "D / Right - Move the figure right.");
 		font->Print2D(10.0f + x, BLOCK_HEIGHT * 5 + y, "S / Down - Move the figure down.");
 		font->Print2D(10.0f + x, BLOCK_HEIGHT * 6 + y, "Space - Drop the figure.");
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 7 + y, "G - Turn on/off the ghost.");
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 8 + y, "F12 - Take a screenshot.");
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 7 + y, "T - Turn on/off sound.");
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 8 + y, "G - Turn on/off the ghost.");
+		font->Print2D(10.0f + x, BLOCK_HEIGHT * 9 + y, "F12 - Take a screenshot.");
 		font->SetIndent(font->GetIndent() + 2.5f);
 
 		font->SetScale(libVec3(0.8f, 0.8f, 0.0f));
@@ -220,6 +227,17 @@ Glass::Update
 void Glass::Update()
 {
 	if (engine->IsKeyDown(LIBK_F1)) help = !help;
+	if (engine->IsKeyDown(LIBK_T))
+	{
+		bool soundEnabled = !cfg.GetBool("soundEnabled", true);
+
+		if (soundEnabled)
+			engine->SetState(LIB_VOLUME, 1.0f);
+		else
+			engine->SetState(LIB_VOLUME, 0.0f);
+
+		cfg.SetBool("soundEnabled", soundEnabled);
+	}
 	if (engine->IsKeyDown(LIBK_G))
 	{
 		ghostEnabled = !ghostEnabled;

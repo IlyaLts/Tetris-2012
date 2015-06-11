@@ -25,7 +25,7 @@
 #define WIDTH 544
 #define HEIGHT 704
 
-#define TETRIS_VERSION "1.0"
+#define TETRIS_VERSION "1.1"
 
 #ifdef LIB_RELEASE
 	#define DATA_PACK "Data.lpk//" 
