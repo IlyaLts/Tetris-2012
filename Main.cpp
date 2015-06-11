@@ -48,7 +48,7 @@ bool Render()
 {
 	engine->GfxClear(LIBC_BLACK);
 
-	background->Draw2DQuad(libQuad(0.0f, 0.0f, 0.0f, 0.0f, WIDTH, HEIGHT, (float) WIDTH / background->GetWidth(), (float) HEIGHT / background->GetHeight()));
+	background->Draw2DQuad(libQuad(libVertex(0.0f, 0.0f, 0.0f, 0.0f), libVertex(WIDTH, HEIGHT, (float) WIDTH / background->GetWidth(), (float) HEIGHT / background->GetHeight())));
 	gameGlass.Draw(32.0f, 32.0f);
 
 	return true;
@@ -95,7 +95,6 @@ libMain()
 	if (libGetEngine(engine))
 	{
 		engine->SetState(LIB_TITLE, "Tetris 2012");
-		engine->SetState(LIB_CLASS_NAME, "Tetris 2012");
 		engine->SetState(LIB_RESOLUTION, WIDTH, HEIGHT);
 		engine->SetState(LIB_RESIZABLE, false);
 		engine->SetState(LIB_FPS_LIMIT, 60);

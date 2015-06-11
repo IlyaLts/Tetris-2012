@@ -86,8 +86,8 @@ void Glass::Draw(float x, float y)
 	if (help)
 	{
 		// Glass
-		engine->Draw2DQuad(libQuad(x, y, WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT));
-		DrawRectangleOutline(libQuad(x, y, WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT), LIBC_BLACK);
+		engine->Draw2DQuad(libQuad(libVertex(x, y), libVertex(WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT)));
+		DrawRectangleOutline(libQuad(libVertex(x, y), libVertex(WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT)), LIBC_BLACK);
 
 		// Help
 		font->SetIndent(font->GetIndent() - 2.5f);
@@ -108,7 +108,7 @@ void Glass::Draw(float x, float y)
 	else
 	{
 		// Glass
-		engine->Draw2DQuad(libQuad(x, y, BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y));
+		engine->Draw2DQuad(libQuad(libVertex(x, y), libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y)));
 		
 		// Draw the figure
 		if (IsThereFreeSpaceForNewFigure())
@@ -160,10 +160,10 @@ void Glass::Draw(float x, float y)
 			}
 		}
 
-		DrawRectangleOutline(libQuad(x, y, BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y), LIBC_BLACK);
+		DrawRectangleOutline(libQuad(libVertex(x, y), libVertex(BLOCK_WIDTH * GLASS_WIDTH + x, BLOCK_HEIGHT * GLASS_HEIGHT + y)), LIBC_BLACK);
 
 		// A Cell for a next new figure
-		engine->Draw2DQuad(libQuad(BLOCK_WIDTH * GLASS_WIDTH + x + 32.0f, y, BLOCK_WIDTH * GLASS_WIDTH + BLOCK_WIDTH * FIGURE_WIDTH + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f));
+		engine->Draw2DQuad(libQuad(libVertex(BLOCK_WIDTH * GLASS_WIDTH + x + 32.0f, y), libVertex(BLOCK_WIDTH * GLASS_WIDTH + BLOCK_WIDTH * FIGURE_WIDTH + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f)));
 
 		// Draw a next new figure
 		for (int i = 0; i < FIGURE_WIDTH; i++)
@@ -177,15 +177,15 @@ void Glass::Draw(float x, float y)
 			}
 		}
 
-		DrawRectangleOutline(libQuad(320.0f + x + 32.0f, y, 448 + x + 32.0f, 32.0f + y), LIBC_BLACK);
-		DrawRectangleOutline(libQuad(320.0f + x + 32.0f, 32.0f + y, 448.0f + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f), LIBC_BLACK);
+		DrawRectangleOutline(libQuad(libVertex(320.0f + x + 32.0f, y), libVertex(448 + x + 32.0f, 32.0f + y)), LIBC_BLACK);
+		DrawRectangleOutline(libQuad(libVertex(320.0f + x + 32.0f, 32.0f + y), libVertex(448.0f + x + 32.0f, BLOCK_HEIGHT * FIGURE_HEIGHT + y + 32.0f)), LIBC_BLACK);
 
 		// Cells
 		for (int i = 0; i < 4; i++)
 		{
-			engine->Draw2DQuad(libQuad(320.0f + x + 32.0f, 190.0f + y + 96.0f * i, 448.0f + x + 32.0f, 254.0f + y + 96.0f * i));
-			DrawRectangleOutline(libQuad(320.0f + x + 32.0f, 190.0f + y + 96.0f * i, 448.0f + x + 32.0f, 222.0f + y + 96.0f * i), LIBC_BLACK);
-			DrawRectangleOutline(libQuad(320.0f + x + 32.0f, 222.0f + y + 96.0f * i, 448.0f + x + 32.0f, 254.0f + y + 96.0f * i), LIBC_BLACK);
+			engine->Draw2DQuad(libQuad(libVertex(320.0f + x + 32.0f, 190.0f + y + 96.0f * i), libVertex(448.0f + x + 32.0f, 254.0f + y + 96.0f * i)));
+			DrawRectangleOutline(libQuad(libVertex(320.0f + x + 32.0f, 190.0f + y + 96.0f * i), libVertex(448.0f + x + 32.0f, 222.0f + y + 96.0f * i)), LIBC_BLACK);
+			DrawRectangleOutline(libQuad(libVertex(320.0f + x + 32.0f, 222.0f + y + 96.0f * i), libVertex(448.0f + x + 32.0f, 254.0f + y + 96.0f * i)), LIBC_BLACK);
 		}
 
 		font->Print2D(320.0f + x + 32.0f, y, "Next");
@@ -201,8 +201,8 @@ void Glass::Draw(float x, float y)
 		// Draw "game over" table
 		if (gameOver)
 		{
-			engine->Draw2DQuad(libQuad(BLOCK_WIDTH * 2 + x, BLOCK_HEIGHT * 5 + y, BLOCK_WIDTH * 8 + x, BLOCK_HEIGHT * 6 + y));
-			DrawRectangleOutline(libQuad(BLOCK_WIDTH * 2 + x, BLOCK_HEIGHT * 5 + y, BLOCK_WIDTH * 8 + x, BLOCK_HEIGHT * 6 + y), LIBC_BLACK);
+			engine->Draw2DQuad(libQuad(libVertex(BLOCK_WIDTH * 2 + x, BLOCK_HEIGHT * 5 + y), libVertex(BLOCK_WIDTH * 8 + x, BLOCK_HEIGHT * 6 + y)));
+			DrawRectangleOutline(libQuad(libVertex(BLOCK_WIDTH * 2 + x, BLOCK_HEIGHT * 5 + y), libVertex(BLOCK_WIDTH * 8 + x, BLOCK_HEIGHT * 6 + y)), LIBC_BLACK);
 
 			if (score.Get() != MAX_SCORE)
 				font->Print2D(BLOCK_WIDTH * 2 + BLOCK_WIDTH / 4 + x, BLOCK_HEIGHT * 5 + y, "GAME OVER!");
