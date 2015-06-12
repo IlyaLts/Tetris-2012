@@ -48,12 +48,7 @@ bool Glass::Init()
 	// Config reading
 	cfg.Load("Tetris.cfg", DATA_PACK "Tetris.cfg");
 	keyDelay = cfg.GetFloat("KeyDelay", 0.15f);
-
-	if (cfg.GetBool("soundEnabled", true))
-		engine->SetState(LIB_VOLUME, 1.0f);
-	else
-		engine->SetState(LIB_VOLUME, 0.0f);
-
+	engine->SetState(LIB_VOLUME, (float) cfg.GetBool("soundEnabled", true));
 	ghostEnabled = cfg.GetBool("ghostEnabled", false);
 
 	// Record reading
@@ -227,6 +222,8 @@ Glass::Update
 void Glass::Update()
 {
 	if (engine->IsKeyDown(LIBK_F1)) help = !help;
+
+	// Turn on/off sound
 	if (engine->IsKeyDown(LIBK_T))
 	{
 		bool soundEnabled = !cfg.GetBool("soundEnabled", true);
@@ -238,12 +235,15 @@ void Glass::Update()
 
 		cfg.SetBool("soundEnabled", soundEnabled);
 	}
+
+	// Turn on/off the ghost
 	if (engine->IsKeyDown(LIBK_G))
 	{
 		ghostEnabled = !ghostEnabled;
 		cfg.SetBool("ghostEnabled", ghostEnabled);
 	}
 
+	// Game logic
 	if (!gameOver)
 	{
 		// Move the figure down every the delay time
