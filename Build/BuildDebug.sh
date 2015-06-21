@@ -1,5 +1,2 @@
-mkdir Debug
-cd Debug
-
-cmake -DCMAKE_BUILD_TYPE=Debug .. -G "Unix Makefiles"
-make
+sh BuildDebug32.sh
+sh BuildDebug64.sh

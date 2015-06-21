@@ -1,38 +1,39 @@
-# Project: Tetris
-# CMake required
-
 cmake_minimum_required (VERSION 2.8)
 
-set (PROJECT Tetris)
+set (PROJECT Tetris-2012)
+
+if (BIT EQUAL 64)
+	set (BIT_NAME)
+else (BIT EQUAL 64)
+	set (BIT_NAME 32)
+	set (CMAKE_C_FLAGS "-m32")
+	set (CMAKE_CXX_FLAGS "-m32")
+endif (BIT EQUAL 64)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
-	set (BUILD_NAME Tetris)
-	set (BUILD_TYPE RELEASE)
+	set (BUILD_TYPE LIB_RELEASE)
+	set (DEBUG_POSTFIX)
 else (CMAKE_BUILD_TYPE STREQUAL "Release")
-	set (BUILD_NAME Tetris_dbg)
-	set (BUILD_TYPE DEBUG)
+	set (BUILD_TYPE LIB_DEBUG)
+	set (DEBUG_POSTFIX _dbg)
 endif (CMAKE_BUILD_TYPE STREQUAL "Release")
+
+# Build name
+set (BUILD_NAME Tetris${BIT_NAME}${DEBUG_POSTFIX})
 
 # Where libs library should be
 if (WIN32)
-	if (CMAKE_BUILD_TYPE STREQUAL "Release")
-		set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Lib/Win32/libs)
-	else (CMAKE_BUILD_TYPE STREQUAL "Release")
-		set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Lib/Win32/libs_dbg)
-	endif (CMAKE_BUILD_TYPE STREQUAL "Release")
+	set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Lib/Win32/libs${BIT_NAME}${DEBUG_POSTFIX})
 else (WIN32)
-	if (CMAKE_BUILD_TYPE STREQUAL "Release")
-		set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Lib/Unix/libs)
-	else (CMAKE_BUILD_TYPE STREQUAL "Release")
-		set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Lib/Unix/libs_dbg)
-	endif (CMAKE_BUILD_TYPE STREQUAL "Release")
+	set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Lib/Unix/libs${BIT_NAME}${DEBUG_POSTFIX})
 endif (WIN32)
 
-# where the source code should be
+# Where the source code should be
+
 set (MOUNT_DIR ..)
 
-# where we are building to
-set (EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${MOUNT_DIR}/Tetris)
+# Where we are building to
+set (EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${MOUNT_DIR}/Tetris-2012/)
 
 # Win32
 if (WIN32)
@@ -63,26 +64,19 @@ set (HEADERS
 	)
 
 if (WIN32)
-	set (RESOURCES
-		${MOUNT_DIR}/Resources/Main.rc
-		)
+	set (RESOURCES ${MOUNT_DIR}/Resources/Main.rc)
 else (WIN32)
-	set (RESOURCES
-		)
+	set (RESOURCES)
 endif (WIN32)
 
 if (MSVC)
-	add_definitions(/D${BUILD_TYPE} /W3)
+	add_definitions(/D${BUILD_TYPE} /DLIB_${BIT} /W3)
 else (MSVC)
-	add_definitions(-D${BUILD_TYPE})
+	add_definitions(-D${BUILD_TYPE} -DLIB_${BIT})
 endif (MSVC)
 
 add_definitions("-std=c++11")
 add_executable (${BUILD_NAME} ${GUI_TYPE} ${SOURCES} ${HEADERS} ${RESOURCES})
-
-#==========================================================
-#	Linking libraries for Load/Unload dll libraries
-#==========================================================
 
 # Win32
 if (WIN32)
@@ -95,5 +89,5 @@ endif (WIN32)
 
 # Unix
 if (UNIX)
-	target_link_libraries(${BUILD_NAME} ${MOUNT_LIBS}.a dl)
+	target_link_libraries(${BUILD_NAME} ${MOUNT_LIBS}.a SDL2 dl)
 endif (UNIX)
