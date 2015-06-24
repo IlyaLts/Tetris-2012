@@ -528,7 +528,7 @@ void Glass::MoveLeft()
 			if (figure.x + i <= 0 && figure.blocks[i][j].filled)
 				return;
 
-			if (figure.blocks[i][j].filled && glass[figure.x + i - 1][figure.y + j].filled && !figure.blocks[i - 1][j].filled)
+			if (figure.blocks[i][j].filled && glass[figure.x + i - 1][figure.y + j].filled)
 				return;
 		}
 	}
@@ -550,7 +550,7 @@ void Glass::MoveRight()
 			if (figure.x + i >= GLASS_WIDTH - 1 && figure.blocks[i][j].filled)
 				return;
 
-			if (figure.blocks[i][j].filled && glass[figure.x + i + 1][figure.y + j].filled && !figure.blocks[i + 1][j].filled)
+			if (figure.blocks[i][j].filled && glass[figure.x + i + 1][figure.y + j].filled)
 				return;
 		}
 	}
