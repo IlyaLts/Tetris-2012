@@ -4,19 +4,19 @@ set (PROJECT Tetris-2012)
 
 if (BIT EQUAL 64)
 	set (BIT_NAME)
-else (BIT EQUAL 64)
+else ()
 	set (BIT_NAME 32)
 	set (CMAKE_C_FLAGS "-m32")
 	set (CMAKE_CXX_FLAGS "-m32")
-endif (BIT EQUAL 64)
+endif ()
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
 	set (BUILD_TYPE LIB_RELEASE)
 	set (DEBUG_POSTFIX)
-else (CMAKE_BUILD_TYPE STREQUAL "Release")
+else ()
 	set (BUILD_TYPE LIB_DEBUG)
 	set (DEBUG_POSTFIX _dbg)
-endif (CMAKE_BUILD_TYPE STREQUAL "Release")
+endif ()
 
 # Build name
 set (BUILD_NAME Tetris${BIT_NAME}${DEBUG_POSTFIX})
@@ -29,7 +29,6 @@ else (WIN32)
 endif (WIN32)
 
 # Where the source code should be
-
 set (MOUNT_DIR ..)
 
 # Where we are building to
@@ -38,16 +37,16 @@ set (EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${MOUNT_DIR}/Tetris-2012/)
 # Win32
 if (WIN32)
 	set (GUI_TYPE WIN32)
-endif (WIN32)
+endif ()
 
 # Unix
 if (UNIX)
-endif (UNIX)
+endif ()
 
 # MacOS
 IF (APPLE)
 	SET (GUI_TYPE MACOSX_BUNDLE)
-ENDIF (APPLE)
+endif ()
 
 project (${PROJECT})
 
@@ -65,15 +64,15 @@ set (HEADERS
 
 if (WIN32)
 	set (RESOURCES ${MOUNT_DIR}/Resources/Main.rc)
-else (WIN32)
+else ()
 	set (RESOURCES)
-endif (WIN32)
+endif ()
 
 if (MSVC)
 	add_definitions(/D${BUILD_TYPE} /DLIB_${BIT} /W3)
-else (MSVC)
+else ()
 	add_definitions(-D${BUILD_TYPE} -DLIB_${BIT})
-endif (MSVC)
+endif ()
 
 add_definitions("-std=c++11")
 add_executable (${BUILD_NAME} ${GUI_TYPE} ${SOURCES} ${HEADERS} ${RESOURCES})
@@ -82,12 +81,12 @@ add_executable (${BUILD_NAME} ${GUI_TYPE} ${SOURCES} ${HEADERS} ${RESOURCES})
 if (WIN32)
 	if (MSVC)
 		target_link_libraries(${BUILD_NAME} ${MOUNT_LIBS}.lib user32.lib)
-	else (MSVC)
+	else ()
 		target_link_libraries(${BUILD_NAME} ${MOUNT_LIBS}.a user32.a)
-	endif (MSVC)
-endif (WIN32)
+	endif ()
+endif ()
 
 # Unix
 if (UNIX)
 	target_link_libraries(${BUILD_NAME} ${MOUNT_LIBS}.a SDL2 dl)
-endif (UNIX)
+endif ()
