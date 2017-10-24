@@ -35,7 +35,7 @@ bool Init()
 {
 	if (!engine->Get_libTexture(background, DATA_PACK "Background.png", true)) return false;
 	if (!gameGlass.Init()) return false;
-	
+
 	return true;
 }
 

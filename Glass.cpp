@@ -39,7 +39,7 @@ Glass::Init
 */
 bool Glass::Init()
 {
-	if (!engine->Get_libFont(font, DATA_PACK "Font.png", true)) return false;
+	if (!engine->Get_libFont(font, "Data/Font.ttf", true)) return false;
 	if (!engine->Get_libSound(drop, DATA_PACK "Drop.wav", false, true)) return false;
 	if (!engine->Get_libTexture(blocks, DATA_PACK "Blocks.png", true)) return false;
 
@@ -91,21 +91,20 @@ void Glass::Draw(float x, float y)
 		DrawRectangleOutline(libQuad(libVertex(x, y), libVertex(WIDTH - BLOCK_WIDTH, HEIGHT - BLOCK_HEIGHT)), LIBC_BLACK);
 
 		// Help
-		font->SetIndent(font->GetIndent() - 2.5f);
-		font->Print2D(80.0f + x, BLOCK_HEIGHT + y - 10.0f, libVA("Tetris 2012 ver. %s", TETRIS_VERSION));
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 2 + y, "W / Up - Rotate the figure.");
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 3 + y, "A / Left - Move the figure left.");
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 4 + y, "D / Right - Move the figure right.");
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 5 + y, "S / Down - Move the figure down.");
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 6 + y, "Space - Drop the figure.");
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 7 + y, "T - Turn on/off sound.");
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 8 + y, "G - Turn on/off the ghost.");
-		font->Print2D(10.0f + x, BLOCK_HEIGHT * 9 + y, "F12 - Take a screenshot.");
-		font->SetIndent(font->GetIndent() + 2.5f);
+		font->Print2D(80.0f + x, BLOCK_HEIGHT + y - 10.0f, libVA(
+			"Tetris 2012 ver. %s\n"
+			"W / Up - Rotate the figure.\n"
+			"A / Left - Move the figure left.\n"
+			"D / Right - Move the figure right.\n"
+			"S / Down - Move the figure down.\n"
+			"Space - Drop the figure.\n"
+			"T - Turn on/off sound.\n"
+			"G - Turn on/off the ghost.\n"
+			"F12 - Take a screenshot.", TETRIS_VERSION));
 
-		font->SetScale(libVec3(0.8f, 0.8f, 0.0f));
+		//font->SetScale(libVec3(0.8f, 0.8f, 0.0f));
 		font->Print2D(10.0f + x, HEIGHT - BLOCK_HEIGHT * 3.0f - 20.0f + y, "Copyright (C) 2012 Ilya Lyakhovets");
-		font->SetScale(libVec3(1.0f, 1.0f, 0.0f));
+		//font->SetScale(libVec3(1.0f, 1.0f, 0.0f));*/
 	}
 	else
 	{
@@ -194,9 +193,9 @@ void Glass::Draw(float x, float y)
 		font->Print2D(320.0f + x + 32.0f, 190.0f + y, "Score");
 		font->Print2D(320.0f + x + 32.0f, 222.0f + y, "%d", score.Get());
 		font->Print2D(320.0f + x + 32.0f, 286.0f + y, "Goal");
-		font->Print2D(320.0f + x + 32.0f, 318.0f + y, "%d", scoreGoal.Get());
+		//font->Print2D(320.0f + x + 32.0f, 318.0f + y, "%d", scoreGoal.Get());
 		font->Print2D(320.0f + x + 32.0f, 382.0f + y, "Level");
-		font->Print2D(320.0f + x + 32.0f, 412.0f + y, "%d", level.Get());
+		//font->Print2D(320.0f + x + 32.0f, 412.0f + y, "%d", level.Get());
 		font->Print2D(320.0f + x + 32.0f, 476.0f + y, "Record");
 		font->Print2D(320.0f + x + 32.0f, 508.0f + y, "%d", record.Get());
 

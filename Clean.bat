@@ -1,10 +1,8 @@
 @echo off
 
 for /d /r . %%d in (ipch) do @if exist "%%d" rd /s /q "%%d"
-for /d /r . %%d in (_DEBUG_32_) do @if exist "%%d" rd /s /q "%%d"
-for /d /r . %%d in (_DEBUG_64_) do @if exist "%%d" rd /s /q "%%d"
-for /d /r . %%d in (_RELEASE_32_) do @if exist "%%d" rd /s /q "%%d"
-for /d /r . %%d in (_RELEASE_64_) do @if exist "%%d" rd /s /q "%%d"
+for /d /r . %%d in (_DEBUG_) do @if exist "%%d" rd /s /q "%%d"
+for /d /r . %%d in (_RELEASE_) do @if exist "%%d" rd /s /q "%%d"
 
 del *.log /f /s /q /a
 

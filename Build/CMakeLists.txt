@@ -2,14 +2,6 @@ cmake_minimum_required (VERSION 2.8)
 
 set (PROJECT Tetris-2012)
 
-if (BIT EQUAL 64)
-	set (BIT_NAME)
-else (BIT EQUAL 64)
-	set (BIT_NAME 32)
-	set (CMAKE_C_FLAGS "-m32")
-	set (CMAKE_CXX_FLAGS "-m32")
-endif (BIT EQUAL 64)
-
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
 	set (BUILD_TYPE LIB_RELEASE)
 	set (DEBUG_POSTFIX)
@@ -19,13 +11,13 @@ else (CMAKE_BUILD_TYPE STREQUAL "Release")
 endif (CMAKE_BUILD_TYPE STREQUAL "Release")
 
 # Build name
-set (BUILD_NAME Tetris${BIT_NAME}${DEBUG_POSTFIX})
+set (BUILD_NAME Tetris${DEBUG_POSTFIX})
 
 # Where libs library should be
 if (WIN32)
-	set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Lib/Win32/libs${BIT_NAME}${DEBUG_POSTFIX})
+	set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Lib/Win32/libs${DEBUG_POSTFIX})
 else (WIN32)
-	set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Lib/Unix/libs${BIT_NAME}${DEBUG_POSTFIX})
+	set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Lib/Unix/libs${DEBUG_POSTFIX})
 endif (WIN32)
 
 # Where the source code should be
@@ -70,9 +62,9 @@ else (WIN32)
 endif (WIN32)
 
 if (MSVC)
-	add_definitions(/D${BUILD_TYPE} /DLIB_${BIT} /W3)
+	add_definitions(/D${BUILD_TYPE} /W3)
 else (MSVC)
-	add_definitions(-D${BUILD_TYPE} -DLIB_${BIT})
+	add_definitions(-D${BUILD_TYPE})
 endif (MSVC)
 
 add_definitions("-std=c++11")
