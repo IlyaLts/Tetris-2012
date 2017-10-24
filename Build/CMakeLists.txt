@@ -62,9 +62,9 @@ endif ()
 
 if (MSVC)
 	add_definitions(/D${BUILD_TYPE} /W3)
-else (MSVC)
+else ()
 	add_definitions(-D${BUILD_TYPE})
-endif (MSVC)
+endif ()
 
 add_definitions("-std=c++11")
 add_executable (${BUILD_NAME} ${GUI_TYPE} ${SOURCES} ${HEADERS} ${RESOURCES})
