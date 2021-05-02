@@ -5,22 +5,23 @@ set (PROJECT Tetris-2012)
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
 	set (BUILD_TYPE LIB_RELEASE)
 	set (DEBUG_POSTFIX)
-else ()
+else (CMAKE_BUILD_TYPE STREQUAL "Release")
 	set (BUILD_TYPE LIB_DEBUG)
 	set (DEBUG_POSTFIX _dbg)
-endif ()
+endif (CMAKE_BUILD_TYPE STREQUAL "Release")
 
 # Build name
-set (BUILD_NAME Tetris${DEBUG_POSTFIX})
+set (BUILD_NAME Tetris${BIT_NAME}${DEBUG_POSTFIX})
 
 # Where libs library should be
 if (WIN32)
-	set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Lib/Win32/libs${DEBUG_POSTFIX})
+	set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Libraries/Windows/libs${BIT_NAME}${DEBUG_POSTFIX})
 else (WIN32)
-	set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Lib/Unix/libs${DEBUG_POSTFIX})
+	set (MOUNT_LIBS ${CMAKE_SOURCE_DIR}/../../libEngine/Libraries/Unix/libs${BIT_NAME}${DEBUG_POSTFIX})
 endif (WIN32)
 
 # Where the source code should be
+
 set (MOUNT_DIR ..)
 
 # Where we are building to
@@ -29,16 +30,16 @@ set (EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${MOUNT_DIR}/Tetris-2012/)
 # Win32
 if (WIN32)
 	set (GUI_TYPE WIN32)
-endif ()
+endif (WIN32)
 
 # Unix
 if (UNIX)
-endif ()
+endif (UNIX)
 
 # MacOS
 IF (APPLE)
 	SET (GUI_TYPE MACOSX_BUNDLE)
-endif ()
+ENDIF (APPLE)
 
 project (${PROJECT})
 
@@ -56,15 +57,15 @@ set (HEADERS
 
 if (WIN32)
 	set (RESOURCES ${MOUNT_DIR}/Resources/Main.rc)
-else ()
+else (WIN32)
 	set (RESOURCES)
-endif ()
+endif (WIN32)
 
 if (MSVC)
-	add_definitions(/D${BUILD_TYPE} /W3)
-else ()
-	add_definitions(-D${BUILD_TYPE})
-endif ()
+	add_definitions(/D${BUILD_TYPE} /DLIB_${BIT} /W3)
+else (MSVC)
+	add_definitions(-D${BUILD_TYPE} -DLIB_${BIT})
+endif (MSVC)
 
 add_definitions("-std=c++11")
 add_executable (${BUILD_NAME} ${GUI_TYPE} ${SOURCES} ${HEADERS} ${RESOURCES})
@@ -73,12 +74,12 @@ add_executable (${BUILD_NAME} ${GUI_TYPE} ${SOURCES} ${HEADERS} ${RESOURCES})
 if (WIN32)
 	if (MSVC)
 		target_link_libraries(${BUILD_NAME} ${MOUNT_LIBS}.lib user32.lib)
-	else ()
+	else (MSVC)
 		target_link_libraries(${BUILD_NAME} ${MOUNT_LIBS}.a user32.a)
-	endif ()
-endif ()
+	endif (MSVC)
+endif (WIN32)
 
 # Unix
 if (UNIX)
 	target_link_libraries(${BUILD_NAME} ${MOUNT_LIBS}.a SDL2 dl)
-endif ()
+endif (UNIX)

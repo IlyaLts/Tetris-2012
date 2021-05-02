@@ -23,4 +23,4 @@ Points for 4 lines = 100 x level
 
 Notes
 ------
-If there is no sound in the game install oalinst.exe located in the same folder.
+If there is no sound in the game, install oalinst.exe located in Redist folder.
