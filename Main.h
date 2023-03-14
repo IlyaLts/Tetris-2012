@@ -20,7 +20,7 @@
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
-#include "../libEngine/Include/libEngine.h"
+#include "../libEngine/Include/Engine.h"
 
 #define WIDTH 544
 #define HEIGHT 704
@@ -29,12 +29,10 @@
 
 #ifdef LIB_RELEASE
     #define ENGINE_PATH "./"
-	#define DATA_PACK   "Data.lpk//"
+    #define DATA_PACK   "Data.lpk//"
 #else
     #define ENGINE_PATH "../../libEngine/Binaries/"
-    #define DATA_PACK "Data/"		
+    #define DATA_PACK "Data/"       
 #endif
-
-extern libEngine *engine;
 
 #endif // !__MAIN_H__

@@ -21,7 +21,6 @@
 #include "Game.h"
 #include "Figure.h"
 
-libEngine *engine = nullptr;
 libTexture *background = nullptr;
 
 Game game;
@@ -33,10 +32,10 @@ Init
 */
 bool Init()
 {
-	if (!engine->GetTexture(background, DATA_PACK "Background.png")) return false;
-	if (!game.Init()) return false;
-	
-	return true;
+    LIB_CHECK(engine->GetTexture(background, DATA_PACK "Background.png"));
+    LIB_CHECK(game.Init());
+    
+    return true;
 }
 
 /*
@@ -46,12 +45,12 @@ Render
 */
 bool Render()
 {
-	engine->GfxClear(LIB_COLOR_BLACK);
+    engine->ClearScreen(LIB_COLOR_BLACK);
 
-	background->Draw2DQuad(libQuad(libVertex(0.0f, 0.0f, 0.0f, 0.0f), libVertex(WIDTH, HEIGHT, float(WIDTH) / float(background->GetWidth()), float(HEIGHT) / float(background->GetHeight()))));
-	game.Draw();
-	
-	return true;
+    background->Draw2DQuad(libQuad(libVertex(0.0f, 0.0f, 0.0f, 0.0f), libVertex(WIDTH, HEIGHT, libCast<float>(WIDTH) / libCast<float>(background->GetWidth()), libCast<float>(HEIGHT) / libCast<float>(background->GetHeight()))));
+    game.Draw();
+    
+    return true;
 }
 
 /*
@@ -61,12 +60,12 @@ Frame
 */
 bool Frame()
 {
-	if (engine->IsKeyPressed(LIBK_ESCAPE)) return false;
-	if (engine->IsKeyPressed(LIBK_F12)) engine->SystemScreenshot();
+    if (engine->IsKeyPressed(LIBK_ESCAPE)) return false;
+    if (engine->IsKeyPressed(LIBK_F12)) engine->TakeScreenshot();
 
-	game.Update();
+    game.Update();
 
-	return true;
+    return true;
 }
 
 /*
@@ -76,9 +75,9 @@ Free
 */
 bool Free()
 {
-	game.Free();
+    game.Free();
 
-	return true;
+    return true;
 }
 
 /*
@@ -88,26 +87,24 @@ libMain
 */
 libMain()
 {
-	if (libGetEngine(engine, ENGINE_PATH))
-	{
-		engine->SetState(LIB_TITLE, "Tetris 2012");
-		engine->SetState(LIB_RESOLUTION, WIDTH, HEIGHT);
-		engine->SetState(LIB_RESIZABLE_WINDOW, false);
-		engine->SetState(LIB_LOG_FILE, true);
-		engine->SetState(LIB_LOG_FILENAME, "Tetris.log");
-		engine->SetState(LIB_INIT, Init);
-		engine->SetState(LIB_RENDER, Render);
-		engine->SetState(LIB_FRAME, Frame);
-		engine->SetState(LIB_FREE, Free);
+    if (!libGetEngine(ENGINE_PATH))
+    {
+        libDialog::Error("Error!", "Couldn't load libEngine.");
+        return -1;
+    }
 
-		engine->StartEngine();
-		libFreeEngine(engine);
-	}
-	else
-	{
-		libDialog::Error("Error!", "Couldn't load libEngine.");
-		return -1;
-	}
+    engine->SetState(LIB_WINDOW_TITLE, "Tetris 2012");
+    engine->SetState(LIB_WINDOW_SIZE, WIDTH, HEIGHT);
+    engine->SetState(LIB_WINDOW_ALLOW_RESIZING, false);
+    engine->SetState(LIB_LOG_FILE, true);
+    engine->SetState(LIB_LOG_FILENAME, "Tetris.log");
+    engine->SetState(LIB_INIT, Init);
+    engine->SetState(LIB_RENDER, Render);
+    engine->SetState(LIB_FRAME, Frame);
+    engine->SetState(LIB_FREE, Free);
 
-	return 0;
+    engine->Start();
+    libFreeEngine();
+
+    return 0;
 }

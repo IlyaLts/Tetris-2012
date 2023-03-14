@@ -22,52 +22,51 @@
 #ifndef __FIGURE_H__
 #define __FIGURE_H__
 
-#define NUMBER_OF_FIGURES		7
-#define ROTATIONS_OF_FIGURE		4
-#define FIGURE_WIDTH			4
-#define FIGURE_HEIGHT			4
+#define NUMBER_OF_FIGURES       7
+#define ROTATIONS_OF_FIGURE     4
+#define FIGURE_WIDTH            4
+#define FIGURE_HEIGHT           4
 
 extern bool g_figures[NUMBER_OF_FIGURES][ROTATIONS_OF_FIGURE][FIGURE_WIDTH][FIGURE_HEIGHT];
 
 struct Block
 {
-	enum Color
-	{
-		Cyan,
-		Blue,
-		Orange,
-		Yellow,
-		Green,
-		Purple,
-		Red,
-	};
+    enum Color
+    {
+        Cyan,
+        Blue,
+        Orange,
+        Yellow,
+        Green,
+        Purple,
+        Red,
+    };
 
-	Color color;
-	bool filled;
+    Color color;
+    bool filled;
 };
 
 /*
 ===============================================================================
 
-	Figure
+    Figure
 
 ===============================================================================
 */
 class Figure
 {
 public:
-			
-				Figure();
+            
+                Figure();
 
-	void		New();
-	void		Rotate();
+    void        New();
+    void        Rotate();
 
-	int			x;
-	int			y;
-	int			rot;
-	int			num;
-	int			numNext;
-	Block		blocks[FIGURE_WIDTH][FIGURE_HEIGHT];
+    libVec2i    pos;
+    int         rot;
+    int         num;
+    int         numNext;
+    Block       blocks[FIGURE_WIDTH][FIGURE_HEIGHT];
 };
 
 #endif // !__FIGURE_H__

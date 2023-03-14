@@ -18,9 +18,9 @@ set (LIBENGINE_PATH ../../libEngine)
 
 # Where libs library should be
 if (WIN32)
-	set (LIBS_PATH ${CMAKE_SOURCE_DIR}/${LIBENGINE_PATH}/Libraries/Windows/libs${BIT_NAME}${DEBUG_POSTFIX})
+	set (LIBS_PATH ${CMAKE_SOURCE_DIR}/${LIBENGINE_PATH}/Libraries/Windows/libs${BUILD_NAME_POSTFIX})
 else()
-	set (LIBS_PATH ${CMAKE_SOURCE_DIR}/${LIBENGINE_PATH}/Libraries/Linux/libs${BIT_NAME}${DEBUG_POSTFIX})
+	set (LIBS_PATH ${CMAKE_SOURCE_DIR}/${LIBENGINE_PATH}/Libraries/Linux/libs${BUILD_NAME_POSTFIX})
 endif()
 
 # Where the source code should be
@@ -63,7 +63,7 @@ else()
 	add_definitions(-D${BUILD_TYPE})
 endif()
 
-add_definitions("-std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 add_executable (${BUILD_NAME} ${GUI_TYPE} ${SOURCE_LIST} ${RESOURCES})
 
 if (WIN32)
