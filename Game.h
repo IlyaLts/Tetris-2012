@@ -52,53 +52,53 @@ class Game
 {
 public:
 
-                Game();
+                    Game();
 
-    bool        Init();
-    void        Draw();
-    void        Update();
-    void        Free();
+    bool            Init();
+    void            Draw();
+    void            Update();
+    void            Free();
 
 private:
 
-    void        SaveRecord();
+    void            SaveRecord();
     
-    void        DrawBlock(float x, float y, Block::Color colorType, const libColor &color = libColor()) const;
-    void        DrawBorder(const libQuad &quad, const libColor &color) const;
+    void            DrawBlock(float x, float y, Block::Color colorType, const libColor &color = libColor()) const;
+    void            DrawBorder(const libQuad &quad, const libColor &color) const;
 
-    void        NewGame();
-    void        RemoveFilledLines();
-    bool        IsFigureDropped() const;
-    bool        IsThereSpaceForNewFigure() const;
+    void            NewGame();
+    void            RemoveFilledLines();
+    bool            IsFigureDropped() const;
+    bool            IsThereSpaceForNewFigure() const;
 
-    void        MoveLeft();
-    void        MoveRight();
-    void        MoveDown();
-    void        DropFigure();
-    void        RotateFigure();
+    void            MoveLeft();
+    void            MoveRight();
+    void            MoveDown();
+    void            DropFigure();
+    void            RotateFigure();
 
-    libFont *   font;
-    libTexture *blocks;
-    libSound *  drop;
+    libFont *       font;
+    libTexture *    blocks;
+    libSound *      drop;
 
-    Block       field[FIELD_WIDTH][FIELD_HEIGHT];
-    Figure      figure;
+    Block           field[FIELD_WIDTH][FIELD_HEIGHT];
+    Figure          figure;
 
-    bool        gameOver;
-    bool        help;
-    bool        helperEnabled;
-    libHolder   score;
-    libHolder   scoreGoal;
-    libHolder   level;
-    libHolder   record;
+    bool            gameOver;
+    bool            help;
+    bool            helperEnabled;
+    libHolder<int>  score;
+    libHolder<int>  scoreGoal;
+    libHolder<int>  level;
+    libHolder<int>  record;
 
-    float       keyDelay;
-    libTimer    fallDelay;
-    libTimer    leftFigureDelay;
-    libTimer    rightFigureDelay;
-    libTimer    downFigureDelay;
+    float           keyDelay;
+    libTimer        fallDelay;
+    libTimer        leftFigureDelay;
+    libTimer        rightFigureDelay;
+    libTimer        downFigureDelay;
 
-    libCfg      cfg;
+    libCfg          cfg;
 };
 
 #endif // !__GAME_H__

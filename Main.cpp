@@ -21,7 +21,7 @@
 #include "Game.h"
 #include "Figure.h"
 
-libTexture *background = nullptr;
+libTexture *t_background = nullptr;
 
 Game game;
 
@@ -32,9 +32,11 @@ Init
 */
 bool Init()
 {
-    LIB_CHECK(engine->GetTexture(background, DATA_PACK "Background.png"));
+    LIB_CHECK(engine->GetTexture(t_background, DATA_PACK "Background.png"));
     LIB_CHECK(game.Init());
-    
+ 
+    t_background->SetWrapMode(LIB_REPEAT);
+
     return true;
 }
 
@@ -47,7 +49,11 @@ bool Render()
 {
     engine->ClearScreen(LIB_COLOR_BLACK);
 
-    background->Draw2DQuad(libQuad(libVertex(0.0f, 0.0f, 0.0f, 0.0f), libVertex(WIDTH, HEIGHT, libCast<float>(WIDTH) / libCast<float>(background->GetWidth()), libCast<float>(HEIGHT) / libCast<float>(background->GetHeight()))));
+    float tx = libCast<float>(WIDTH / t_background->GetWidth());
+    float ty = libCast<float>(HEIGHT / t_background->GetHeight());
+    libQuad q_bg(libVertex(), libVertex(WIDTH, HEIGHT, tx, ty));
+
+    t_background->Draw2DQuad(q_bg);
     game.Draw();
     
     return true;
@@ -60,8 +66,11 @@ Frame
 */
 bool Frame()
 {
-    if (engine->IsKeyPressed(LIBK_ESCAPE)) return false;
-    if (engine->IsKeyPressed(LIBK_F12)) engine->TakeScreenshot();
+    if (engine->IsKeyPressed(LIBK_ESCAPE))
+        return false;
+
+    if (engine->IsKeyPressed(LIBK_F12))
+        engine->TakeScreenshot();
 
     game.Update();
 
@@ -95,7 +104,7 @@ libMain()
 
     engine->SetState(LIB_WINDOW_TITLE, "Tetris 2012");
     engine->SetState(LIB_WINDOW_SIZE, WIDTH, HEIGHT);
-    engine->SetState(LIB_WINDOW_ALLOW_RESIZING, false);
+    engine->SetState(LIB_WINDOW_RESIZABLE, false); 
     engine->SetState(LIB_LOG_FILE, true);
     engine->SetState(LIB_LOG_FILENAME, "Tetris.log");
     engine->SetState(LIB_INIT, Init);

@@ -52,7 +52,7 @@ bool Game::Init()
     helperEnabled = cfg.GetBool("helperEnabled", DEFAULT_HELPER_ENABLED);
 
     libFile f("Record.sav", libFile::Mode::ReadBin);
-    f.Read(&record, sizeof(libHolder), 1);
+    f.Read(&record, sizeof(libHolder<int>), 1);
     f.Close();
 
     NewGame();
@@ -67,22 +67,24 @@ Game::Draw
 */
 void Game::Draw()
 {
-    const float x = 32.0f;
-    const float y = 32.0f;
+    const libVec2 pos(32.0f, 32.0f);
 
     // Help screen
     if (help)
     {
-        engine->Draw2DQuad(libQuad(libVertex(BLOCK_SIZE, BLOCK_SIZE), libVertex(WIDTH - BLOCK_SIZE, HEIGHT - BLOCK_SIZE)));
-        DrawBorder(libQuad(libVertex(BLOCK_SIZE, BLOCK_SIZE), libVertex(WIDTH - BLOCK_SIZE, HEIGHT - BLOCK_SIZE)), LIB_COLOR_BLACK);
+        // Help field
+        libQuad quad(libVertex(BLOCK_SIZE, BLOCK_SIZE), libVertex(WIDTH - BLOCK_SIZE, HEIGHT - BLOCK_SIZE));
+        engine->Draw2DQuad(quad);
+        DrawBorder(quad, LIB_COLOR_BLACK);
 
         font->SetAlign(LIB_HCENTER | LIB_TOP);
         font->SetSize(28);
-        font->Print2D(WIDTH / 2, y + 20, libFormat("Tetris 2012 ver. %s\n", TETRIS_VERSION));
+        font->Print2D(WIDTH / 2, pos.y + 20, libFormat("Tetris 2012 ver. %s\n", TETRIS_VERSION));
 
         float lineSpacing = font->GetLineSpacing();
+
         font->SetSize(18);
-        font->Print2D(WIDTH / 2, y + 20.0f + lineSpacing * 2,
+        font->Print2D(WIDTH / 2, pos.y + 20.0f + lineSpacing * 2,
             "W / Up - Rotate the figure.\n"
             "A / Left - Move the figure left.\n"
             "D / Right - Move the figure right.\n"
@@ -100,7 +102,8 @@ void Game::Draw()
     else
     {
         // Game field
-        engine->Draw2DQuad(libQuad(libVertex(x, y), libVertex(BLOCK_SIZE * FIELD_WIDTH + x, BLOCK_SIZE * FIELD_HEIGHT + y)));
+        engine->Draw2DQuad(libQuad(libVertex(pos.x, pos.y),
+                                   libVertex(BLOCK_SIZE * FIELD_WIDTH + pos.x, BLOCK_SIZE * FIELD_HEIGHT + pos.y)));
 
         // The current figure
         if (IsThereSpaceForNewFigure())
@@ -111,7 +114,9 @@ void Game::Draw()
                 {
                     if (figure.blocks[i][j].filled)
                     {
-                        DrawBlock(BLOCK_SIZE * (i + figure.pos.x) + x, BLOCK_SIZE * (j + figure.pos.y) + y, figure.blocks[i][j].color);
+                        float x = BLOCK_SIZE * (i + figure.pos.x) + pos.x;
+                        float y = BLOCK_SIZE * (j + figure.pos.y) + pos.y;
+                        DrawBlock(x, y, figure.blocks[i][j].color);
                     }
                 }
             }
@@ -123,7 +128,8 @@ void Game::Draw()
             int tempX = figure.pos.x;
             int tempY = figure.pos.y;
 
-            while (!IsFigureDropped()) figure.pos.y++;
+            while (!IsFigureDropped())
+                figure.pos.y++;
 
             // Shows only if there is enough space
             if (figure.pos.y - FIGURE_HEIGHT > tempY)
@@ -134,7 +140,9 @@ void Game::Draw()
                     {
                         if (figure.blocks[i][j].filled)
                         {
-                            DrawBlock(BLOCK_SIZE * (i + figure.pos.x) + x, BLOCK_SIZE * (j + figure.pos.y) + y, figure.blocks[i][j].color, HELPER_COLOR);
+                            float x = BLOCK_SIZE * (i + figure.pos.x) + pos.x;
+                            float y = BLOCK_SIZE * (j + figure.pos.y) + pos.y;
+                            DrawBlock(x, y, figure.blocks[i][j].color, HELPER_COLOR);
                         }
                     }
                 }
@@ -151,16 +159,18 @@ void Game::Draw()
             {
                 if (field[i][j].filled)
                 {
-                    DrawBlock(x + BLOCK_SIZE * i, y + BLOCK_SIZE * j, field[i][j].color);
+                    DrawBlock(pos.x + BLOCK_SIZE * i, pos.y + BLOCK_SIZE * j, field[i][j].color);
                 }
             }
         }
 
-        // Game border
-        DrawBorder(libQuad(libVertex(x, y), libVertex(x + BLOCK_SIZE * FIELD_WIDTH, y + BLOCK_SIZE * FIELD_HEIGHT)), LIB_COLOR_BLACK);
+        // Game field border
+        DrawBorder(libQuad(libVertex(pos.x, pos.y),
+                           libVertex(pos.x + BLOCK_SIZE * FIELD_WIDTH, pos.y + BLOCK_SIZE * FIELD_HEIGHT)), LIB_COLOR_BLACK);
 
-        // Next figure
-        engine->Draw2DQuad(libQuad(libVertex(WIDTH - BLOCK_SIZE - BLOCK_SIZE * FIGURE_WIDTH, y), libVertex(WIDTH - BLOCK_SIZE, y + BLOCK_SIZE + BLOCK_SIZE * FIGURE_HEIGHT)));
+        // Next figure panel
+        engine->Draw2DQuad(libQuad(libVertex(WIDTH - BLOCK_SIZE - BLOCK_SIZE * FIGURE_WIDTH, pos.y),
+                                   libVertex(WIDTH - BLOCK_SIZE, pos.y + BLOCK_SIZE + BLOCK_SIZE * FIGURE_HEIGHT)));
 
         for (int i = 0; i < FIGURE_WIDTH; i++)
         {
@@ -168,45 +178,61 @@ void Game::Draw()
             {
                 if (g_figures[figure.numNext][0][j][i])
                 {
-                    DrawBlock(libCast<float>(WIDTH - BLOCK_SIZE - BLOCK_SIZE * FIGURE_WIDTH + BLOCK_SIZE * i), y + BLOCK_SIZE + BLOCK_SIZE * j, (Block::Color)figure.numNext);
+                    float x = libCast<float>(WIDTH - BLOCK_SIZE - BLOCK_SIZE * FIGURE_WIDTH + BLOCK_SIZE * i);
+                    float y = pos.y + BLOCK_SIZE + BLOCK_SIZE * j;
+                    DrawBlock(x, y, libCast<Block::Color>(figure.numNext));
                 }
             }
         }
 
-        DrawBorder(libQuad(libVertex(WIDTH - BLOCK_SIZE * 5, y), libVertex(WIDTH - BLOCK_SIZE, y + BLOCK_SIZE)), LIB_COLOR_BLACK);
-        DrawBorder(libQuad(libVertex(WIDTH - BLOCK_SIZE * 5, y + BLOCK_SIZE), libVertex(WIDTH - BLOCK_SIZE, y + BLOCK_SIZE + BLOCK_SIZE * FIGURE_HEIGHT)), LIB_COLOR_BLACK);
+        DrawBorder(libQuad(libVertex(WIDTH - BLOCK_SIZE * 5, pos.y),
+                           libVertex(WIDTH - BLOCK_SIZE, pos.y + BLOCK_SIZE)), LIB_COLOR_BLACK);
+        
+        DrawBorder(libQuad(libVertex(WIDTH - BLOCK_SIZE * 5, pos.y + BLOCK_SIZE),
+                           libVertex(WIDTH - BLOCK_SIZE, pos.y + BLOCK_SIZE + BLOCK_SIZE * FIGURE_HEIGHT)), LIB_COLOR_BLACK);
 
         // Other panels
         for (int i = 0; i < 4; i++)
         {
-            engine->Draw2DQuad(libQuad(libVertex(WIDTH - BLOCK_SIZE * 5, y + BLOCK_SIZE * 6 + BLOCK_SIZE * 3 * i), libVertex(WIDTH - BLOCK_SIZE, y + BLOCK_SIZE * 8 + BLOCK_SIZE * 3 * i)));
-            DrawBorder(libQuad(libVertex(WIDTH - BLOCK_SIZE * 5, y + BLOCK_SIZE * 6 + BLOCK_SIZE * 3 * i), libVertex(WIDTH - BLOCK_SIZE, y + BLOCK_SIZE * 7 + BLOCK_SIZE * 3 * i)), LIB_COLOR_BLACK);
-            DrawBorder(libQuad(libVertex(WIDTH - BLOCK_SIZE * 5, y + BLOCK_SIZE * 7 + BLOCK_SIZE * 3 * i), libVertex(WIDTH - BLOCK_SIZE, y + BLOCK_SIZE * 8 + BLOCK_SIZE * 3 * i)), LIB_COLOR_BLACK);
+            float offsetY = libCast<float>(BLOCK_SIZE * 3 * i);
+
+            engine->Draw2DQuad(libQuad(libVertex(WIDTH - BLOCK_SIZE * 5, pos.y + BLOCK_SIZE * 6 + offsetY),
+                                       libVertex(WIDTH - BLOCK_SIZE, pos.y + BLOCK_SIZE * 8 + offsetY)));
+
+            DrawBorder(libQuad(libVertex(WIDTH - BLOCK_SIZE * 5, pos.y + BLOCK_SIZE * 6 + offsetY),
+                               libVertex(WIDTH - BLOCK_SIZE, pos.y + BLOCK_SIZE * 7 + offsetY)), LIB_COLOR_BLACK);
+
+            DrawBorder(libQuad(libVertex(WIDTH - BLOCK_SIZE * 5, pos.y + BLOCK_SIZE * 6 + offsetY),
+                               libVertex(WIDTH - BLOCK_SIZE, pos.y + BLOCK_SIZE * 8 + offsetY)), LIB_COLOR_BLACK);
         }
+
+        libVec2 textPos(WIDTH - BLOCK_SIZE * 3, pos.y + BLOCK_SIZE / 2);
 
         font->SetSize(18);
         font->SetAlign(LIB_CENTER);
-        font->Print2D(WIDTH - BLOCK_SIZE * 3, y + BLOCK_SIZE / 2, "Next");
-        font->Print2D(WIDTH - BLOCK_SIZE * 3, y + BLOCK_SIZE * 6 + BLOCK_SIZE / 2, "Score");
-        font->Print2D(WIDTH - BLOCK_SIZE * 3, y + BLOCK_SIZE * 7 + BLOCK_SIZE / 2, "%d", score.Get());
-        font->Print2D(WIDTH - BLOCK_SIZE * 3, y + BLOCK_SIZE * 9 + BLOCK_SIZE / 2, "Goal");
-        font->Print2D(WIDTH - BLOCK_SIZE * 3, y + BLOCK_SIZE * 10 + BLOCK_SIZE / 2, "%d", scoreGoal.Get());
-        font->Print2D(WIDTH - BLOCK_SIZE * 3, y + BLOCK_SIZE * 12 + BLOCK_SIZE / 2, "Level");
-        font->Print2D(WIDTH - BLOCK_SIZE * 3, y + BLOCK_SIZE * 13 + BLOCK_SIZE / 2, "%d", level.Get());
-        font->Print2D(WIDTH - BLOCK_SIZE * 3, y + BLOCK_SIZE * 15 + BLOCK_SIZE / 2, "Record");
-        font->Print2D(WIDTH - BLOCK_SIZE * 3, y + BLOCK_SIZE * 16 + BLOCK_SIZE / 2, "%d", record.Get());
+        font->Print2D(textPos.x, textPos.y, "Next");
+        font->Print2D(textPos.x, textPos.y + BLOCK_SIZE * 6, "Score");
+        font->Print2D(textPos.x, textPos.y + BLOCK_SIZE * 7, "%d", score.Get());
+        font->Print2D(textPos.x, textPos.y + BLOCK_SIZE * 9, "Goal");
+        font->Print2D(textPos.x, textPos.y + BLOCK_SIZE * 10, "%d", scoreGoal.Get());
+        font->Print2D(textPos.x, textPos.y + BLOCK_SIZE * 12, "Level");
+        font->Print2D(textPos.x, textPos.y + BLOCK_SIZE * 13, "%d", level.Get());
+        font->Print2D(textPos.x, textPos.y + BLOCK_SIZE * 15, "Record");
+        font->Print2D(textPos.x, textPos.y + BLOCK_SIZE * 16, "%d", record.Get());
 
         // Game over message
         if (gameOver)
         {
-            libQuad gameOverPanel(libVertex(x + BLOCK_SIZE, y + BLOCK_SIZE * 5), libVertex(x + BLOCK_SIZE * 9, y + BLOCK_SIZE * 7));
-            engine->Draw2DQuad(gameOverPanel);
-            DrawBorder(gameOverPanel, LIB_COLOR_BLACK);
+            libQuad quad(libVertex(pos.x + BLOCK_SIZE, pos.y + BLOCK_SIZE * 5),
+                         libVertex(pos.x + BLOCK_SIZE * 9, pos.y + BLOCK_SIZE * 7));
+
+            engine->Draw2DQuad(quad);
+            DrawBorder(quad, LIB_COLOR_BLACK);
 
             if (score.Get() != MAX_SCORE)
-                font->Print2D(x + FIELD_WIDTH * BLOCK_SIZE / 2, y + BLOCK_SIZE * 6, "GAME OVER!");
+                font->Print2D(pos.x + FIELD_WIDTH * BLOCK_SIZE / 2, pos.y + BLOCK_SIZE * 6, "GAME OVER!");
             else
-                font->Print2D(x + FIELD_WIDTH * BLOCK_SIZE / 2, y + BLOCK_SIZE * 6, "MAX SCORE!");
+                font->Print2D(pos.x + FIELD_WIDTH * BLOCK_SIZE / 2, pos.y + BLOCK_SIZE * 6, "MAX SCORE!");
         }
     }
 }
@@ -218,7 +244,8 @@ Game::Update
 */
 void Game::Update()
 {
-    if (engine->IsKeyPressed(LIBK_F1)) help = !help;
+    if (engine->IsKeyPressed(LIBK_F1))
+        help = !help;
 
     // Turns on/off sound
     if (engine->IsKeyPressed(LIBK_T))
@@ -253,6 +280,7 @@ void Game::Update()
             leftFigureDelay.Restart();
             MoveLeft();
         }
+
         // Moves the figure right
         if ((engine->IsKeyPressed(LIBK_D) || engine->IsKeyPressed(LIBK_RIGHT)) ||
             (engine->IsKey(LIBK_D) || engine->IsKey(LIBK_RIGHT)) && (rightFigureDelay.GetSeconds() >= keyDelay))
@@ -260,6 +288,7 @@ void Game::Update()
             rightFigureDelay.Restart();
             MoveRight();
         }
+
         // Moves the figure down
         if ((engine->IsKeyPressed(LIBK_S) || engine->IsKeyPressed(LIBK_DOWN)) ||
             (engine->IsKey(LIBK_S) || engine->IsKey(LIBK_DOWN)) && downFigureDelay.GetSeconds() >= keyDelay)
@@ -268,11 +297,13 @@ void Game::Update()
             downFigureDelay.Restart();
             MoveDown();
         }
+
         // Rotates the figure
         if (engine->IsKeyPressed(LIBK_W) || engine->IsKeyPressed(LIBK_UP))
         {
             RotateFigure();
         }
+
         // Drops the figure
         if (engine->IsKeyPressed(LIBK_SPACE))
         {
@@ -287,11 +318,11 @@ void Game::Update()
             {
                 for (int j = 0; j < FIGURE_HEIGHT; j++)
                 {
-                    if (figure.blocks[i][j].filled)
-                    {
-                        field[figure.pos.x + i][figure.pos.y + j].filled = true;
-                        field[figure.pos.x + i][figure.pos.y + j].color = figure.blocks[i][j].color;
-                    }
+                    if (!figure.blocks[i][j].filled)
+                        continue;
+
+                    field[figure.pos.x + i][figure.pos.y + j].filled = true;
+                    field[figure.pos.x + i][figure.pos.y + j].color = figure.blocks[i][j].color;
                 }
             }
 
@@ -339,7 +370,7 @@ void Game::SaveRecord()
         record.Set(score);
 
         libFile f("Record.sav", libFile::Mode::WriteBin);
-        f.Write(&record, sizeof(libHolder), 1);
+        f.Write(&record, sizeof(libHolder<int>), 1);
         f.Close();
     }
 }
@@ -359,7 +390,10 @@ void Game::DrawBlock(float x, float y, Block::Color colorType, const libColor &c
                          {BLOCK_SIZE * 2, BLOCK_SIZE, BLOCK_SIZE * 3, BLOCK_SIZE * 2},
                          {0, BLOCK_SIZE * 2, BLOCK_SIZE, BLOCK_SIZE * 3} };
 
-    blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_SIZE, BLOCK_SIZE, coords[colorType][0], coords[colorType][1], coords[colorType][2], coords[colorType][3], x, y, clr);
+    blocks->Draw2DAtlas(0.0f, 0.0f, BLOCK_SIZE, BLOCK_SIZE, coords[colorType][0],
+                                                            coords[colorType][1],
+                                                            coords[colorType][2],
+                                                            coords[colorType][3], x, y, 0.0f, clr);
 }
 
 /*
@@ -369,10 +403,10 @@ Game::DrawBorder
 */
 void Game::DrawBorder(const libQuad &quad, const libColor &clr) const
 {
-    engine->Draw2DLine(libVertex(quad.v[0].x, quad.v[0].y, clr), libVertex(quad.v[1].x, quad.v[1].y, clr), 2.0f);
-    engine->Draw2DLine(libVertex(quad.v[1].x, quad.v[1].y, clr), libVertex(quad.v[2].x, quad.v[2].y, clr), 2.0f);
-    engine->Draw2DLine(libVertex(quad.v[2].x, quad.v[2].y, clr), libVertex(quad.v[3].x, quad.v[3].y, clr), 2.0f);
-    engine->Draw2DLine(libVertex(quad.v[3].x, quad.v[3].y, clr), libVertex(quad.v[0].x, quad.v[0].y, clr), 2.0f);
+    engine->Draw2DLine(libVertex(quad.v[0].pos, clr), libVertex(quad.v[1].pos, clr), 2.0f);
+    engine->Draw2DLine(libVertex(quad.v[1].pos, clr), libVertex(quad.v[2].pos, clr), 2.0f);
+    engine->Draw2DLine(libVertex(quad.v[2].pos, clr), libVertex(quad.v[3].pos, clr), 2.0f);
+    engine->Draw2DLine(libVertex(quad.v[3].pos, clr), libVertex(quad.v[0].pos, clr), 2.0f);
 }
 
 /*
@@ -414,12 +448,8 @@ void Game::RemoveFilledLines()
         bool filled = true;
 
         for (int j = 0; j < FIELD_WIDTH; j++)
-        {
             if (!field[j][i].filled)
-            {
                 filled = false;
-            }
-        }
 
         if (filled)
         {
@@ -462,7 +492,9 @@ void Game::RemoveFilledLines()
         {
             level.Set(level.Get() + 1);
             scoreGoal.Set(scoreGoal.Get() * SCORE_GOAL_MULTIPLIER);
-            if (scoreGoal.Get() > MAX_SCORE) scoreGoal.Set(MAX_SCORE);
+
+            if (scoreGoal.Get() > MAX_SCORE)
+                scoreGoal.Set(MAX_SCORE);
         }
     }
 }
@@ -478,14 +510,14 @@ bool Game::IsFigureDropped() const
     {
         for (int j = 0; j < FIGURE_HEIGHT; j++)
         {
-            if (figure.blocks[i][j].filled)
-            {
-                if (figure.blocks[i][j + 1].filled && field[figure.pos.x + i][figure.pos.y + j + 1].filled)
-                    continue;
+            if (!figure.blocks[i][j].filled)
+                continue;
 
-                if (figure.pos.y + j + 1 == FIELD_HEIGHT || field[figure.pos.x + i][figure.pos.y + j + 1].filled)
-                    return true;
-            }
+            if (figure.blocks[i][j + 1].filled && field[figure.pos.x + i][figure.pos.y + j + 1].filled)
+                continue;
+
+            if (figure.pos.y + j + 1 == FIELD_HEIGHT || field[figure.pos.x + i][figure.pos.y + j + 1].filled)
+                return true;
         }
     }
 
@@ -558,7 +590,8 @@ Game::MoveDown
 */
 void Game::MoveDown()
 {
-    if (!IsFigureDropped()) figure.pos.y++;
+    if (!IsFigureDropped())
+        figure.pos.y++;
 }
 
 /*
@@ -568,7 +601,8 @@ Game::DropFigure
 */
 void Game::DropFigure()
 {
-    while (!IsFigureDropped()) MoveDown();
+    while (!IsFigureDropped())
+        MoveDown();
 }
 
 /*
@@ -581,9 +615,10 @@ void Game::RotateFigure()
     bool flag;
     bool allowRotate = true;
     int xOld = figure.pos.x;
-
     int rot = figure.rot + 1;
-    if (rot == ROTATIONS_OF_FIGURE) rot = 0;
+
+    if (rot == ROTATIONS_OF_FIGURE)
+        rot = 0;
 
     // Moves the figure to the right from the wall if there is not enough free space for rotations
     do
@@ -591,17 +626,13 @@ void Game::RotateFigure()
         flag = true;
 
         for (int i = 0; i < -figure.pos.x; i++)
-        {
             for (int j = 0; j < FIGURE_HEIGHT; j++)
-            {
                 if (g_figures[figure.num][rot][j][i])
-                {
                     flag = false;
-                }
-            }
-        }
     
-        if (!flag) MoveRight();
+        if (!flag)
+            MoveRight();
+
     } while (!flag);
 
     // Moves the figure to the left from the wall if there is not enough free space for rotations
@@ -610,17 +641,13 @@ void Game::RotateFigure()
         flag = true;
 
         for (int i = FIGURE_WIDTH - 1; i > FIELD_WIDTH - 1 - figure.pos.x; i--)
-        {
             for (int j = 0; j < FIGURE_HEIGHT; j++)
-            {
                 if (g_figures[figure.num][rot][j][i])
-                {
                     flag = false;
-                }
-            }
-        }
 
-        if (!flag) MoveLeft();
+        if (!flag)
+            MoveLeft();
+
     } while (!flag);
 
     for (int i = 0; i < FIGURE_WIDTH; i++)
@@ -632,8 +659,9 @@ void Game::RotateFigure()
                 allowRotate = false;
 
             // Doesn't allow rotations of the figure if there are any other blocks
-            if (g_figures[figure.num][rot][j][i] && field[figure.pos.x + i][figure.pos.y + j].filled && !g_figures[figure.num][figure.rot][j][i])
-                allowRotate = false;
+            if (g_figures[figure.num][rot][j][i] && !g_figures[figure.num][figure.rot][j][i])
+                if (field[figure.pos.x + i][figure.pos.y + j].filled)
+                    allowRotate = false;
         }
     }
 
