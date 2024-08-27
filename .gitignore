@@ -1,0 +1,12 @@
+.vs/
+/Tetris-2012
+**ipch
+**_DEBUG_
+**_RELEASE_
+*.suo
+*.sdf
+*.user
+*.opensdf
+*.log
+*.db
+*.json
